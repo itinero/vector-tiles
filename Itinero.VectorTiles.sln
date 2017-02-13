@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4B330D21-2EE5-4C34-B716-0DB1FBC58E29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C142786B-F60E-4B6B-B9F2-1D25C3A3D7B5}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		SharedAssemblyVersion.cs = SharedAssemblyVersion.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7E594B3F-4CA9-4198-B90D-DD16972D0481}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{8BEE6496-C8C3-4815-8481-530E6706717B}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Itinero.VectorTiles", "src\Itinero.VectorTiles\Itinero.VectorTiles.xproj", "{DB22EE28-864E-4A81-94A0-32DE2F37284D}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Itinero.VectorTiles.Test.Functional", "test\Itinero.VectorTiles.Test.Functional\Itinero.VectorTiles.Test.Functional.xproj", "{706CE710-A3B7-4565-9B98-ED3B359808C8}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Itinero.VectorTiles.Test", "test\Itinero.VectorTiles.Test\Itinero.VectorTiles.Test.xproj", "{E50C2604-CC1E-4DAE-BB14-851439569413}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A02BE624-4563-4D2C-A93C-6FFB02D04EC1}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "VectorTileWeb", "samples\VectorTileWeb\VectorTileWeb.xproj", "{AF02CC9B-C92F-4BC8-8314-3D620C41B1DE}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Itinero.VectorTiles.Mapbox", "src\Itinero.VectorTiles.Mapbox\Itinero.VectorTiles.Mapbox.xproj", "{BF140F7A-30C4-4A79-8C11-D1348C935B98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB22EE28-864E-4A81-94A0-32DE2F37284D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB22EE28-864E-4A81-94A0-32DE2F37284D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB22EE28-864E-4A81-94A0-32DE2F37284D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB22EE28-864E-4A81-94A0-32DE2F37284D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{706CE710-A3B7-4565-9B98-ED3B359808C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{706CE710-A3B7-4565-9B98-ED3B359808C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{706CE710-A3B7-4565-9B98-ED3B359808C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{706CE710-A3B7-4565-9B98-ED3B359808C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E50C2604-CC1E-4DAE-BB14-851439569413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E50C2604-CC1E-4DAE-BB14-851439569413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E50C2604-CC1E-4DAE-BB14-851439569413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E50C2604-CC1E-4DAE-BB14-851439569413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF02CC9B-C92F-4BC8-8314-3D620C41B1DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF02CC9B-C92F-4BC8-8314-3D620C41B1DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF02CC9B-C92F-4BC8-8314-3D620C41B1DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF02CC9B-C92F-4BC8-8314-3D620C41B1DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF140F7A-30C4-4A79-8C11-D1348C935B98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF140F7A-30C4-4A79-8C11-D1348C935B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF140F7A-30C4-4A79-8C11-D1348C935B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF140F7A-30C4-4A79-8C11-D1348C935B98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB22EE28-864E-4A81-94A0-32DE2F37284D} = {4B330D21-2EE5-4C34-B716-0DB1FBC58E29}
+		{706CE710-A3B7-4565-9B98-ED3B359808C8} = {7E594B3F-4CA9-4198-B90D-DD16972D0481}
+		{E50C2604-CC1E-4DAE-BB14-851439569413} = {7E594B3F-4CA9-4198-B90D-DD16972D0481}
+		{AF02CC9B-C92F-4BC8-8314-3D620C41B1DE} = {A02BE624-4563-4D2C-A93C-6FFB02D04EC1}
+		{BF140F7A-30C4-4A79-8C11-D1348C935B98} = {4B330D21-2EE5-4C34-B716-0DB1FBC58E29}
+	EndGlobalSection
+EndGlobal
