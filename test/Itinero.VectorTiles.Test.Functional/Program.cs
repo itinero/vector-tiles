@@ -24,7 +24,7 @@ namespace Itinero.VectorTiles.Test.Functional
 
                 using (var stream = File.Open(t.Id.ToInvariantString() + ".mvt", FileMode.Create))
                 {
-                    Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(segments, t, routerDb, 4096, stream, null);
+                    Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(segments, t, "transportation", routerDb, 4096, stream, null);
 
                     //stream.Flush();
                     //stream.Seek(0, SeekOrigin.Begin);
