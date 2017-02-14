@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Itinero.Attributes;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Itinero.VectorTiles.Mapbox
@@ -9,7 +11,8 @@ namespace Itinero.VectorTiles.Mapbox
         /// <summary>
         /// Writes the tile to the given stream.
         /// </summary>
-        public static void Write(this Segment[] segments, Itinero.VectorTiles.Tiles.Tile tile, RouterDb routerDb, uint extent, Stream stream)
+        public static void Write(this Segment[] segments, Itinero.VectorTiles.Tiles.Tile tile, RouterDb routerDb, uint extent, Stream stream,
+            Func<IAttributeCollection, IAttributeCollection> mapAttributes)
         {
             var keys = new Dictionary<string, uint>();
             var values = new Dictionary<string, uint>();
@@ -52,10 +55,18 @@ namespace Itinero.VectorTiles.Mapbox
 
                 feature.Type = Tile.GeomType.LineString;
 
-                var profile = edgeProfile.Get(segments[i].Profile);
-                if (profile != null)
+                if (mapAttributes != null)
                 {
-                    foreach (var attribute in profile)
+                    IAttributeCollection attributes = new AttributeCollection(edgeProfile.Get(segments[i].Profile));
+                    var meta = edgeMeta.Get(segments[i].Meta);
+                    foreach(var a in meta)
+                    {
+                        attributes.AddOrReplace(a);
+                    }
+
+                    attributes = mapAttributes(attributes);
+
+                    foreach(var attribute in attributes)
                     {
                         uint keyId;
                         if (!keys.TryGetValue(attribute.Key, out keyId))
@@ -73,25 +84,49 @@ namespace Itinero.VectorTiles.Mapbox
                         feature.Tags.Add(valueId);
                     }
                 }
-                var meta = edgeMeta.Get(segments[i].Meta);
-                if (meta != null)
+                else
                 {
-                    foreach (var attribute in meta)
+                    var profile = edgeProfile.Get(segments[i].Profile);
+                    if (profile != null)
                     {
-                        uint keyId;
-                        if (!keys.TryGetValue(attribute.Key, out keyId))
+                        foreach (var attribute in profile)
                         {
-                            keyId = (uint)keys.Count;
-                            keys.Add(attribute.Key, keyId);
+                            uint keyId;
+                            if (!keys.TryGetValue(attribute.Key, out keyId))
+                            {
+                                keyId = (uint)keys.Count;
+                                keys.Add(attribute.Key, keyId);
+                            }
+                            uint valueId;
+                            if (!values.TryGetValue(attribute.Value, out valueId))
+                            {
+                                valueId = (uint)values.Count;
+                                values.Add(attribute.Value, valueId);
+                            }
+                            feature.Tags.Add(keyId);
+                            feature.Tags.Add(valueId);
                         }
-                        uint valueId;
-                        if (!values.TryGetValue(attribute.Value, out valueId))
+                    }
+                    var meta = edgeMeta.Get(segments[i].Meta);
+                    if (meta != null)
+                    {
+                        foreach (var attribute in meta)
                         {
-                            valueId = (uint)values.Count;
-                            values.Add(attribute.Value, valueId);
+                            uint keyId;
+                            if (!keys.TryGetValue(attribute.Key, out keyId))
+                            {
+                                keyId = (uint)keys.Count;
+                                keys.Add(attribute.Key, keyId);
+                            }
+                            uint valueId;
+                            if (!values.TryGetValue(attribute.Value, out valueId))
+                            {
+                                valueId = (uint)values.Count;
+                                values.Add(attribute.Value, valueId);
+                            }
+                            feature.Tags.Add(keyId);
+                            feature.Tags.Add(valueId);
                         }
-                        feature.Tags.Add(keyId);
-                        feature.Tags.Add(valueId);
                     }
                 }
 

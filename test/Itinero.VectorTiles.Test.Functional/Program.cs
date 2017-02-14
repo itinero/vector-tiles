@@ -14,7 +14,7 @@ namespace Itinero.VectorTiles.Test.Functional
             var routerDb = RouterDb.Deserialize(File.OpenRead(@"C:\work\data\routing\belgium.c.cf.routerdb"));
 
             var tile = Tiles.Tile.CreateAroundLocation(51.267966846313556f, 4.801913201808929f, 10);
-            var tileRange = tile.GetSubTiles(11);
+            var tileRange = tile.GetSubTiles(14);
 
             foreach (var t in tileRange)
             {
@@ -24,7 +24,7 @@ namespace Itinero.VectorTiles.Test.Functional
 
                 using (var stream = File.Open(t.Id.ToInvariantString() + ".mvt", FileMode.Create))
                 {
-                    Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(segments, t, routerDb, 4096, stream);
+                    Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(segments, t, routerDb, 4096, stream, null);
 
                     //stream.Flush();
                     //stream.Seek(0, SeekOrigin.Begin);
