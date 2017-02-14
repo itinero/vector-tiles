@@ -11,7 +11,7 @@ namespace Itinero.VectorTiles.Mapbox
         /// <summary>
         /// Writes the tile to the given stream.
         /// </summary>
-        public static void Write(this Segment[] segments, Itinero.VectorTiles.Tiles.Tile tile, RouterDb routerDb, uint extent, Stream stream,
+        public static void Write(this Segment[] segments, Itinero.VectorTiles.Tiles.Tile tile, string layerName, RouterDb routerDb, uint extent, Stream stream,
             Func<IAttributeCollection, IAttributeCollection> mapAttributes)
         {
             var keys = new Dictionary<string, uint>();
@@ -26,7 +26,7 @@ namespace Itinero.VectorTiles.Mapbox
             
             var layer = new Mapbox.Tile.Layer();
             layer.Version = 2;
-            layer.Name = "transport";
+            layer.Name = layerName;
             layer.Extent = extent;
             for (var i = 0; i < segments.Length; i++)
             {
