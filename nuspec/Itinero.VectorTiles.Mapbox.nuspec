@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Itinero.VectorTiles.Mapbox</id>
+    <version>$version$</version>
+    <authors>Itinero.VectorTiles.Mapbox</authors>
+    <owners>Itinero.VectorTiles.Mapbox</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Itinero.VectorTiles.Mapbox</description>
+    <licenseUrl>https://raw.githubusercontent.com/itinero/vector-tiles/master/LICENSE.md</licenseUrl>
+    <projectUrl>http://www.itinero.tech/</projectUrl>
+    <iconUrl>http://www.itinero.tech/logos/itinero_logo_notext.svg.128.png</iconUrl>
+    <tags></tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Itinero.VectorTiles" version="[$version$, )" />
+        <dependency id="NETStandard.Library" version="[1.6.0, )" />
+        <dependency id="protobuf-net" version="[2.1.0, )" />
+      </group>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="Itinero.VectorTiles" version="[$version$, )" />
+        <dependency id="NETStandard.Library" version="[1.6.0, )" />
+        <dependency id="protobuf-net" version="[2.1.0, )" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.5" />
+      <frameworkAssembly assemblyName="System.Data" targetFramework=".NETFramework4.5" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="src\Itinero.VectorTiles.Mapboxbin\Release\net45\Itinero.VectorTiles.Mapbox.dll" target="lib\net45\Itinero.VectorTiles.Mapbox.dll" />
+    <file src="src\Itinero.VectorTiles.Mapbox\bin\Release\netstandard1.6\Itinero.VectorTiles.Mapbox.dll" target="lib\netstandard1.6\Itinero.VectorTiles.Mapbox.dll" />
+  </files>
+</package>
