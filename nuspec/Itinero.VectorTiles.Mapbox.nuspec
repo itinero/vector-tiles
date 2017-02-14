@@ -29,7 +29,7 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="src\Itinero.VectorTiles.Mapboxbin\Release\net45\Itinero.VectorTiles.Mapbox.dll" target="lib\net45\Itinero.VectorTiles.Mapbox.dll" />
+    <file src="src\Itinero.VectorTiles.Mapbox\bin\Release\net45\Itinero.VectorTiles.Mapbox.dll" target="lib\net45\Itinero.VectorTiles.Mapbox.dll" />
     <file src="src\Itinero.VectorTiles.Mapbox\bin\Release\netstandard1.6\Itinero.VectorTiles.Mapbox.dll" target="lib\netstandard1.6\Itinero.VectorTiles.Mapbox.dll" />
   </files>
 </package>
