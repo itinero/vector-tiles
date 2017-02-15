@@ -18,13 +18,19 @@ namespace Itinero.VectorTiles
         public static Segment[] ExtractTile(this RouterDb routerDb, ulong tileId)
         {
             var tile = new Tile(tileId);
-            var tileBox = new LocalGeo.Box(tile.Bottom, tile.Left, tile.Top, tile.Right);
+            var diffX = (tile.Top - tile.Bottom);
+            var diffY = (tile.Right - tile.Left);
+            var marginX = diffX / 1024;
+            var marginY = diffY / 1024;
+
+            var tileBox = new LocalGeo.Box(tile.Bottom - marginY, tile.Left - marginX, 
+                tile.Top + marginY, tile.Right + marginX);
             var segments = new List<Segment>();
 
             var vertices = HilbertExtensions.Search(routerDb.Network.GeometricGraph,
-                tileBox.MinLat, tileBox.MinLon, tileBox.MaxLat, tileBox.MaxLon);
+                tileBox.MinLat - marginY, tileBox.MinLon - marginX, 
+                tileBox.MaxLat + marginY, tileBox.MaxLon + marginX);
             var edges = new HashSet<long>();
-            //var enumShape = new Coordinate[1024];
 
             var edgeEnumerator = routerDb.Network.GetEdgeEnumerator();
             foreach (var vertex in vertices)
