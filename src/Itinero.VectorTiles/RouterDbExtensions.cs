@@ -28,8 +28,8 @@ namespace Itinero.VectorTiles
             var segments = new List<Segment>();
 
             var vertices = HilbertExtensions.Search(routerDb.Network.GeometricGraph,
-                tileBox.MinLat - marginY, tileBox.MinLon - marginX, 
-                tileBox.MaxLat + marginY, tileBox.MaxLon + marginX);
+                tileBox.MinLat - diffY, tileBox.MinLon - diffX, 
+                tileBox.MaxLat + diffY, tileBox.MaxLon + diffX);
             var edges = new HashSet<long>();
 
             var edgeEnumerator = routerDb.Network.GetEdgeEnumerator();
