@@ -4,6 +4,7 @@ using Itinero.Algorithms.Search.Hilbert;
 using Itinero.LocalGeo;
 using Itinero.Graphs.Geometric;
 using Itinero.Data.Network;
+using System;
 
 namespace Itinero.VectorTiles
 {
@@ -15,7 +16,8 @@ namespace Itinero.VectorTiles
         /// <summary>
         /// Extracts one tile for the given tile.
         /// </summary>
-        public static Segment[] ExtractTile(this RouterDb routerDb, ulong tileId)
+        public static Segment[] ExtractTile(this RouterDb routerDb, ulong tileId, 
+            Func<ushort, uint, bool> includeProfile)
         {
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
@@ -46,15 +48,24 @@ namespace Itinero.VectorTiles
                         continue;
                     }
                     edges.Add(edgeEnumerator.Id);
+                    
+                    // loop over shape.
+                    var edgeData = edgeEnumerator.Data;
+
+                    // check if this edge needs to be included or not.
+                    if (includeProfile != null &&
+                        !includeProfile(edgeData.Profile, edgeData.MetaId))
+                    { // include profile returns false
+                        continue;
+                    }
 
                     // get shape.
                     var coordinateTo = routerDb.Network.GetVertex(edgeEnumerator.To);
                     //var enumShapeCount = edgeEnumerator.FillShape(coordinateFrom, coordinateTo, enumShape);
                     var shape = new List<Coordinate>();
                     var enumShape = routerDb.Network.GetShape(edgeEnumerator.Current);
-                    
-                    // loop over shape.
-                    var edgeData = edgeEnumerator.Data;
+
+                    // split at tile edges.
                     var previous = false;
                     for (var i = 0; i < enumShape.Count; i++)
                     {
@@ -108,34 +119,5 @@ namespace Itinero.VectorTiles
 
             return segments.ToArray();
         }
-
-        ///// <summary>
-        ///// Fills the given array as efficiently as possible with shape points.
-        ///// </summary>
-        //private static int FillShape(this Data.Network.RoutingNetwork.EdgeEnumerator enumerator, Coordinate coordinateFrom, Coordinate coordinateTo, Coordinate[] shape)
-        //{
-        //    var size = 0;
-        //    shape[0] = coordinateFrom;
-        //    size++;
-
-        //    var enumShape = enumerator.Shape;
-        //    if (enumShape != null)
-        //    {
-        //        if (enumerator.DataInverted)
-        //        {
-        //            enumShape = enumShape.Reverse();
-        //        }
-        //        for(var i = 0; i < enumShape.Count; i++)
-        //        {
-        //            shape[size] = enumShape[i];
-        //            size++;
-        //        }
-        //    }
-
-        //    shape[size] = coordinateTo;
-        //    size++;
-
-        //    return size;
-        //}
     }
 }

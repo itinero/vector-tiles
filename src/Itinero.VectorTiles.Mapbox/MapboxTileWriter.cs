@@ -51,7 +51,6 @@ namespace Itinero.VectorTiles.Mapbox
                     feature.Geometry.Add(GenerateParameterInteger(dx));
                     feature.Geometry.Add(GenerateParameterInteger(dy));
                 }
-                //GenerateClosePath(feature.Geometry);
 
                 feature.Type = Tile.GeomType.LineString;
 
