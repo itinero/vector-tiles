@@ -16,6 +16,14 @@ namespace Itinero.VectorTiles
         /// <summary>
         /// Extracts one tile for the given tile.
         /// </summary>
+        public static Segment[] ExtractTile(this RouterDb routerDb, ulong tileId)
+        {
+            return routerDb.ExtractTile(tileId, null);
+        }
+
+        /// <summary>
+        /// Extracts one tile for the given tile.
+        /// </summary>
         public static Segment[] ExtractTile(this RouterDb routerDb, ulong tileId, 
             Func<ushort, uint, bool> includeProfile)
         {

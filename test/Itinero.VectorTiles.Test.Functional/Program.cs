@@ -18,7 +18,7 @@ namespace Itinero.VectorTiles.Test.Functional
 
             foreach (var t in tileRange)
             {
-                var segments = routerDb.ExtractTile(t.Id);
+                var segments = routerDb.ExtractTile(t.Id, null);
 
                 //var tileGeoJson = Itinero.VectorTiles.GeoJson.GeoJsonTileWriter.ToGeoJson(segments, routerDb);
 
