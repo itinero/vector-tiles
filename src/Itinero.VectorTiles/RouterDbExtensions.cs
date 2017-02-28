@@ -1,10 +1,33 @@
-﻿using Itinero.VectorTiles.Tiles;
-using System.Collections.Generic;
+﻿// The MIT License (MIT)
+
+// Copyright (c) 2017 Ben Abelshausen
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 using Itinero.Algorithms.Search.Hilbert;
-using Itinero.LocalGeo;
-using Itinero.Graphs.Geometric;
 using Itinero.Data.Network;
+using Itinero.Graphs.Geometric;
+using Itinero.LocalGeo;
+using Itinero.VectorTiles.Layers;
+using Itinero.VectorTiles.Tiles;
 using System;
+using System.Collections.Generic;
 
 namespace Itinero.VectorTiles
 {
@@ -14,18 +37,10 @@ namespace Itinero.VectorTiles
     public static class RouterDbExtensions
     {
         /// <summary>
-        /// Extracts one tile for the given tile.
+        /// Extracts segments for the given tile.
         /// </summary>
-        public static Segment[] ExtractTile(this RouterDb routerDb, ulong tileId)
-        {
-            return routerDb.ExtractTile(tileId, null);
-        }
-
-        /// <summary>
-        /// Extracts one tile for the given tile.
-        /// </summary>
-        public static Segment[] ExtractTile(this RouterDb routerDb, ulong tileId, 
-            Func<ushort, uint, bool> includeProfile)
+        public static Segment[] ExtractSegments(this RouterDb routerDb, ulong tileId, 
+            Func<ushort, uint, bool> includeProfile = null)
         {
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
@@ -126,6 +141,36 @@ namespace Itinero.VectorTiles
             }
 
             return segments.ToArray();
+        }
+
+        /// <summary>
+        /// Extracts a segment layer for the given tile.
+        /// </summary>
+        public static SegmentLayer ExtractSegmentLayer(this RouterDb routerDb, ulong tileId, string layerName,
+            Func<ushort, uint, bool> includeProfile = null)
+        {
+            return new SegmentLayer()
+            {
+                Meta = routerDb.EdgeMeta,
+                Profiles = routerDb.EdgeProfiles,
+                Name = layerName,
+                Segments = routerDb.ExtractSegments(tileId, includeProfile)
+            };
+        }
+
+        /// <summary>
+        /// Extracts a vector tile of the given tile.
+        /// </summary>
+        public static VectorTile ExtractTile(this RouterDb routerDb, ulong tileId, string layerName,
+            Func<ushort, uint, bool> includeProfile = null)
+        {
+            var layers = new List<Layer>(1);
+            layers.Add(routerDb.ExtractSegmentLayer(tileId, layerName, includeProfile));
+
+            return new VectorTile()
+            {
+                Layers = layers
+            };
         }
     }
 }

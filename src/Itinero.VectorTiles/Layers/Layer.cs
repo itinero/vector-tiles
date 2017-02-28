@@ -20,7 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Reflection;
-
-[assembly: AssemblyVersion("0.0.7")]
-[assembly: AssemblyInformationalVersion("0.0.7-alpha")]
+namespace Itinero.VectorTiles.Layers
+{
+    /// <summary>
+    /// Abstract representation of a layer.
+    /// </summary>
+    public abstract class Layer
+    {
+        /// <summary>
+        /// Gets or sets the name of the layer.
+        /// </summary>
+        public string Name { get; set; }
+    }
+}

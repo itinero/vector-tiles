@@ -20,7 +20,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Reflection;
+namespace Itinero.VectorTiles.Layers
+{
+    /// <summary>
+    /// Represents a point.
+    /// </summary>
+    public class Point
+    {
+        /// <summary>
+        /// Gets or sets the latitude.
+        /// </summary>
+        public float Latitude { get; set; }
 
-[assembly: AssemblyVersion("0.0.7")]
-[assembly: AssemblyInformationalVersion("0.0.7-alpha")]
+        /// <summary>
+        /// Gets or sets the longitude.
+        /// </summary>
+        public float Longitude { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta id.
+        /// </summary>
+        public uint MetaId { get; set; }
+    }
+}

@@ -20,7 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Reflection;
+using Itinero.VectorTiles.Layers;
+using System.Collections.Generic;
 
-[assembly: AssemblyVersion("0.0.7")]
-[assembly: AssemblyInformationalVersion("0.0.7-alpha")]
+namespace Itinero.VectorTiles
+{
+    /// <summary>
+    /// A vector tile.
+    /// </summary>
+    public class VectorTile
+    {
+        /// <summary>
+        /// Gets or sets the tile id.
+        /// </summary>
+        public ulong TileId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the layers.
+        /// </summary>
+        public List<Layer> Layers { get; set; }
+    }
+}

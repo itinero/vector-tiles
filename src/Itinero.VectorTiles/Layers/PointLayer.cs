@@ -20,7 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Reflection;
+using Itinero.Attributes;
 
-[assembly: AssemblyVersion("0.0.7")]
-[assembly: AssemblyInformationalVersion("0.0.7-alpha")]
+namespace Itinero.VectorTiles.Layers
+{
+    /// <summary>
+    /// Represents a layer with points.
+    /// </summary>
+    public class PointLayer : Layer
+    {
+        /// <summary>
+        /// Gets or sets the points.
+        /// </summary>
+        public Point[] Points { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta index.
+        /// </summary>
+        public AttributesIndex Meta { get; set; }
+    }
+}

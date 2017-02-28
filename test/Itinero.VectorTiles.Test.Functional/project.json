@@ -5,12 +5,12 @@
   },
 
   "dependencies": {
-    "Itinero.Geo": "0.38.21-rc1",
     "Itinero.VectorTiles": "1.0.0-*",
     "Itinero.VectorTiles.Mapbox": "1.0.0-*",
     "NetTopologySuite.IO.GeoJSON": "1.14.0",
     "Newtonsoft.Json": "9.0.1",
-    "mapbox-vector-tile": "3.1.4"
+    "mapbox-vector-tile": "3.1.4",
+    "Itinero.Geo": "0.39.0-rc1"
   },
 
   "frameworks": {

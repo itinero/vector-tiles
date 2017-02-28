@@ -24,7 +24,21 @@
           "lib/portable-net40+sl5+wp80+win8+wpa81/GeoJSON.Net.dll": {}
         }
       },
-      "Itinero/0.38.21-rc1": {
+      "GTFS/2.0.1-alpha": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Core",
+          "mscorlib"
+        ],
+        "compile": {
+          "lib/net40/GTFS.dll": {}
+        },
+        "runtime": {
+          "lib/net40/GTFS.dll": {}
+        }
+      },
+      "Itinero/0.39.0-rc1": {
         "type": "package",
         "dependencies": {
           "Reminiscence": "1.0.5"
@@ -39,11 +53,11 @@
           "lib/net45/Itinero.dll": {}
         }
       },
-      "Itinero.Geo/0.38.21-rc1": {
+      "Itinero.Geo/0.39.0-rc1": {
         "type": "package",
         "dependencies": {
           "GeoAPI": "[1.7.4, 2.0.0)",
-          "Itinero": "0.38.21-rc1",
+          "Itinero": "0.39.0-rc1",
           "NetTopologySuite": "[1.14.0, 2.0.0)"
         },
         "compile": {
@@ -51,6 +65,22 @@
         },
         "runtime": {
           "lib/net45/Itinero.Geo.dll": {}
+        }
+      },
+      "Itinero.Transit/0.2.6-alpha": {
+        "type": "package",
+        "dependencies": {
+          "GTFS": "2.0.1-alpha",
+          "Itinero": "0.38.22-rc1"
+        },
+        "frameworkAssemblies": [
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net45/Itinero.Transit.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Itinero.Transit.dll": {}
         }
       },
       "mapbox-vector-tile/3.1.4": {
@@ -525,7 +555,8 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
-          "Itinero": "0.38.21-rc1",
+          "Itinero": "0.39.0-rc1",
+          "Itinero.Transit": "0.2.6-alpha",
           "NETStandard.Library": "1.6.0"
         },
         "frameworkAssemblies": [
@@ -593,12 +624,24 @@
         "lib/portable-net40+sl5+wp80+win8+wpa81/GeoJSON.Net.dll"
       ]
     },
-    "Itinero/0.38.21-rc1": {
-      "sha512": "k3wgYWtrwxxxQIdPyaQaiLL5SPrLJKXawBY+GwsHTKgywz7zQ1t+P3Jky9k0sNQTfTSTXOdfyCJD8vT45FgJIg==",
+    "GTFS/2.0.1-alpha": {
+      "sha512": "qQh9DI+daNix8nhEoV0BSd7T6BeCmIc66E8hy47/MxWCctf6/P9GkrykkK8HgA5IOUDeOlQ/7IuARAnfbmaEDA==",
       "type": "package",
-      "path": "Itinero/0.38.21-rc1",
+      "path": "GTFS/2.0.1-alpha",
       "files": [
-        "Itinero.0.38.21-rc1.nupkg.sha512",
+        "GTFS.2.0.1-alpha.nupkg.sha512",
+        "GTFS.nuspec",
+        "lib/net40/GTFS.dll",
+        "lib/netstandard1.3/GTFS.dll",
+        "lib/portable40-net403+sl5+win8+wp8/GTFS.dll"
+      ]
+    },
+    "Itinero/0.39.0-rc1": {
+      "sha512": "wOXNLmjmslLg7jSMPaO8bhG10jZp8BPL7wXOCm+QATj+POkcwehRJYkMbhc/5QPRgusXRMF1e4r/EirpMly+sw==",
+      "type": "package",
+      "path": "Itinero/0.39.0-rc1",
+      "files": [
+        "Itinero.0.39.0-rc1.nupkg.sha512",
         "Itinero.nuspec",
         "lib/net40/Itinero.dll",
         "lib/net45/Itinero.dll",
@@ -606,16 +649,27 @@
         "lib/portable-net40+sl4+win8+wp7/Itinero.dll"
       ]
     },
-    "Itinero.Geo/0.38.21-rc1": {
-      "sha512": "oM03NRSJsDPrkvo2LM35EDbAgGwZvNLBW0Kh6zk5tfFKZn9hSvaKTMfLLYmtVV4P606go+kZg4zi2xj+2LHPfA==",
+    "Itinero.Geo/0.39.0-rc1": {
+      "sha512": "NJcXhfSqHkPfiRDzZyMTBg1EraAmdZuc81KlGBWrKwLiskTEdydQFpjT8rdgfnoMLLHoMrzlUsH/qp90/NSwuQ==",
       "type": "package",
-      "path": "Itinero.Geo/0.38.21-rc1",
+      "path": "Itinero.Geo/0.39.0-rc1",
       "files": [
-        "Itinero.Geo.0.38.21-rc1.nupkg.sha512",
+        "Itinero.Geo.0.39.0-rc1.nupkg.sha512",
         "Itinero.Geo.nuspec",
         "lib/net40/Itinero.Geo.dll",
         "lib/net45/Itinero.Geo.dll",
         "lib/portable-net40+sl4+win8+wp7/Itinero.Geo.dll"
+      ]
+    },
+    "Itinero.Transit/0.2.6-alpha": {
+      "sha512": "2VuvJdFz09GXg0tz+9aZklXfx+SQ3mjHbjnlhAqa91UGgbDm5GN/7zOXL/QEsleAkSIO4EgFd6rI0XLNxqYEUg==",
+      "type": "package",
+      "path": "Itinero.Transit/0.2.6-alpha",
+      "files": [
+        "Itinero.Transit.0.2.6-alpha.nupkg.sha512",
+        "Itinero.Transit.nuspec",
+        "lib/net45/Itinero.Transit.dll",
+        "lib/netstandard1.3/Itinero.Transit.dll"
       ]
     },
     "mapbox-vector-tile/3.1.4": {
@@ -2828,7 +2882,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Itinero.Geo >= 0.38.21-rc1",
+      "Itinero.Geo >= 0.39.0-rc1",
       "Itinero.VectorTiles >= 1.0.0-*",
       "Itinero.VectorTiles.Mapbox >= 1.0.0-*",
       "NetTopologySuite.IO.GeoJSON >= 1.14.0",
