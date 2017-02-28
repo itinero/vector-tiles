@@ -103,7 +103,8 @@ namespace Itinero.VectorTiles
 
             return new VectorTile()
             {
-                Layers = layers
+                Layers = layers,
+                TileId = tileId
             };
         }
     }
