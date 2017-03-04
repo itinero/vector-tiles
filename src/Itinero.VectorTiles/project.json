@@ -2,8 +2,8 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Itinero": "0.39.0-rc1",
-    "Itinero.Transit": "0.2.6-alpha",
+    "Itinero": "0.40.5-rc1",
+    "Itinero.Transit": "0.3.2-alpha",
     "NETStandard.Library": "1.6.0"
   },
 

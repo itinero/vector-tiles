@@ -20,26 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using Itinero.Transit.Data;
+using System;
+
 namespace Itinero.VectorTiles.Layers
 {
     /// <summary>
-    /// Represents a point.
+    /// Represents configuration data for the point layer.
     /// </summary>
-    public class Point
+    public class StopLayerConfig : LayerConfig
     {
         /// <summary>
-        /// Gets or sets the latitude.
+        /// Gets or set the include stops function.
         /// </summary>
-        public float Latitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets the longitude.
-        /// </summary>
-        public float Longitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets the meta id.
-        /// </summary>
-        public uint MetaId { get; set; }
+        public Func<StopsDb.Enumerator, bool> IncludeStopsFunc { get; set; }
     }
 }

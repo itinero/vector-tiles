@@ -20,41 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Itinero.Transit.Data;
 using Itinero.VectorTiles.Layers;
-using System;
-using System.Collections.Generic;
 
 namespace Itinero.VectorTiles
 {
     /// <summary>
-    /// Contains extension methods for the multimodal db.
+    /// Represents configuration data for the layers generated from a multimodal db.
     /// </summary>
-    public static class MultimodalDbExtensions
+    public class VectorTileConfig
     {
         /// <summary>
-        /// Extract data for the given tile.
+        /// Gets or sets the segment layer config.
         /// </summary>
-        public static VectorTile ExtractTile(this MultimodalDb db, ulong tileId, VectorTileConfig config)
-        {
-            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+        public SegmentLayerConfig SegmentLayerConfig { get; set; }
 
-            var layers = new List<Layer>();
-
-            if (config.SegmentLayerConfig != null)
-            {
-                layers.Add(db.RouterDb.ExtractSegmentLayer(tileId, config.SegmentLayerConfig));
-            }
-            if (config.StopLayerConfig != null)
-            {
-                layers.Add(db.TransitDb.ExtractPointLayerForStops(tileId, config.StopLayerConfig));
-            }
-
-            return new VectorTile()
-            {
-                Layers = layers,
-                TileId = tileId
-            };
-        }
+        /// <summary>
+        /// Gets or sets the stop layer config.
+        /// </summary>
+        public StopLayerConfig StopLayerConfig { get; set; }
     }
 }

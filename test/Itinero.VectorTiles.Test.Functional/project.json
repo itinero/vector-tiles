@@ -10,7 +10,8 @@
     "NetTopologySuite.IO.GeoJSON": "1.14.0",
     "Newtonsoft.Json": "9.0.1",
     "mapbox-vector-tile": "3.1.4",
-    "Itinero.Geo": "0.39.0-rc1"
+    "Serilog.Sinks.ColoredConsole": "2.0.0",
+    "Itinero.Geo": "0.40.5-rc1"
   },
 
   "frameworks": {

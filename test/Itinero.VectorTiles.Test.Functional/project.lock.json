@@ -38,7 +38,7 @@
           "lib/net40/GTFS.dll": {}
         }
       },
-      "Itinero/0.39.0-rc1": {
+      "Itinero/0.40.5-rc1": {
         "type": "package",
         "dependencies": {
           "Reminiscence": "1.0.5"
@@ -53,11 +53,11 @@
           "lib/net45/Itinero.dll": {}
         }
       },
-      "Itinero.Geo/0.39.0-rc1": {
+      "Itinero.Geo/0.40.5-rc1": {
         "type": "package",
         "dependencies": {
           "GeoAPI": "[1.7.4, 2.0.0)",
-          "Itinero": "0.39.0-rc1",
+          "Itinero": "0.40.5-rc1",
           "NetTopologySuite": "[1.14.0, 2.0.0)"
         },
         "compile": {
@@ -67,7 +67,7 @@
           "lib/net45/Itinero.Geo.dll": {}
         }
       },
-      "Itinero.Transit/0.2.6-alpha": {
+      "Itinero.Transit/0.3.2-alpha": {
         "type": "package",
         "dependencies": {
           "GTFS": "2.0.1-alpha",
@@ -204,6 +204,27 @@
         },
         "runtime": {
           "lib/net45/Reminiscence.dll": {}
+        }
+      },
+      "Serilog/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Serilog.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Serilog.dll": {}
+        }
+      },
+      "Serilog.Sinks.ColoredConsole/2.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Serilog": "2.0.0"
+        },
+        "compile": {
+          "lib/net45/Serilog.Sinks.ColoredConsole.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Serilog.Sinks.ColoredConsole.dll": {}
         }
       },
       "System.Collections/4.0.11": {
@@ -555,8 +576,8 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
-          "Itinero": "0.39.0-rc1",
-          "Itinero.Transit": "0.2.6-alpha",
+          "Itinero": "0.40.5-rc1",
+          "Itinero.Transit": "0.3.2-alpha",
           "NETStandard.Library": "1.6.0"
         },
         "frameworkAssemblies": [
@@ -636,37 +657,37 @@
         "lib/portable40-net403+sl5+win8+wp8/GTFS.dll"
       ]
     },
-    "Itinero/0.39.0-rc1": {
-      "sha512": "wOXNLmjmslLg7jSMPaO8bhG10jZp8BPL7wXOCm+QATj+POkcwehRJYkMbhc/5QPRgusXRMF1e4r/EirpMly+sw==",
+    "Itinero/0.40.5-rc1": {
+      "sha512": "Wm2/U+T5CIZAWpb1IgXpWWGhrpOq+Dj9YfOJ5nvtauN4zsYfbXXI5rgiNVjmKrfeWGSGAma3Dve6i0Xj2emj8A==",
       "type": "package",
-      "path": "Itinero/0.39.0-rc1",
+      "path": "Itinero/0.40.5-rc1",
       "files": [
-        "Itinero.0.39.0-rc1.nupkg.sha512",
-        "Itinero.nuspec",
+        "itinero.0.40.5-rc1.nupkg.sha512",
+        "itinero.nuspec",
         "lib/net40/Itinero.dll",
         "lib/net45/Itinero.dll",
         "lib/netstandard1.3/Itinero.dll",
         "lib/portable-net40+sl4+win8+wp7/Itinero.dll"
       ]
     },
-    "Itinero.Geo/0.39.0-rc1": {
-      "sha512": "NJcXhfSqHkPfiRDzZyMTBg1EraAmdZuc81KlGBWrKwLiskTEdydQFpjT8rdgfnoMLLHoMrzlUsH/qp90/NSwuQ==",
+    "Itinero.Geo/0.40.5-rc1": {
+      "sha512": "K9AZWB79Uw5F+cTH5jAggtMxSIkB8J7yJACbTmm+nVBZTvxm2gX5ye1MWLIBkMWKKx7hCPmlw5qgq+UxH/cO6g==",
       "type": "package",
-      "path": "Itinero.Geo/0.39.0-rc1",
+      "path": "Itinero.Geo/0.40.5-rc1",
       "files": [
-        "Itinero.Geo.0.39.0-rc1.nupkg.sha512",
+        "Itinero.Geo.0.40.5-rc1.nupkg.sha512",
         "Itinero.Geo.nuspec",
         "lib/net40/Itinero.Geo.dll",
         "lib/net45/Itinero.Geo.dll",
         "lib/portable-net40+sl4+win8+wp7/Itinero.Geo.dll"
       ]
     },
-    "Itinero.Transit/0.2.6-alpha": {
-      "sha512": "2VuvJdFz09GXg0tz+9aZklXfx+SQ3mjHbjnlhAqa91UGgbDm5GN/7zOXL/QEsleAkSIO4EgFd6rI0XLNxqYEUg==",
+    "Itinero.Transit/0.3.2-alpha": {
+      "sha512": "x58CaiQ2RVhlvd8cAehDfSVGh3lRe6gwg6ZajulQ5xvo18UQyPbi6Nv0wdWoEBjEDOcSHJBnAchliP891e4c7g==",
       "type": "package",
-      "path": "Itinero.Transit/0.2.6-alpha",
+      "path": "Itinero.Transit/0.3.2-alpha",
       "files": [
-        "Itinero.Transit.0.2.6-alpha.nupkg.sha512",
+        "Itinero.Transit.0.3.2-alpha.nupkg.sha512",
         "Itinero.Transit.nuspec",
         "lib/net45/Itinero.Transit.dll",
         "lib/netstandard1.3/Itinero.Transit.dll"
@@ -810,6 +831,32 @@
         "lib/netstandard1.3/Reminiscence.dll",
         "lib/portable-net403+sl50+win+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10/Reminiscence.dll",
         "lib/portable-net45+win8+wpa81+wp8/Reminiscence.dll"
+      ]
+    },
+    "Serilog/2.0.0": {
+      "sha512": "PKR/FMxfHOhX1p3Qs54Uv9dJEC09sI91cVz39Jt/2f/BpCYHTt9F1RpogSJTFU9xxW6j9FHd+P7aBcC0qMeuqg==",
+      "type": "package",
+      "path": "Serilog/2.0.0",
+      "files": [
+        "Serilog.2.0.0.nupkg.sha512",
+        "Serilog.nuspec",
+        "lib/net45/Serilog.dll",
+        "lib/net45/Serilog.xml",
+        "lib/netstandard1.0/Serilog.dll",
+        "lib/netstandard1.0/Serilog.xml",
+        "lib/netstandard1.3/Serilog.dll",
+        "lib/netstandard1.3/Serilog.xml"
+      ]
+    },
+    "Serilog.Sinks.ColoredConsole/2.0.0": {
+      "sha512": "pAH8MO/6oPPToCnwKpSAszIVF0tPpYjKLNhAJlTxAinpcRjPrKT/1bGTW/ZqoCluVyZQl5eg1gIxEkhHEd6Uww==",
+      "type": "package",
+      "path": "Serilog.Sinks.ColoredConsole/2.0.0",
+      "files": [
+        "lib/net45/Serilog.Sinks.ColoredConsole.dll",
+        "lib/netstandard1.3/Serilog.Sinks.ColoredConsole.dll",
+        "serilog.sinks.coloredconsole.2.0.0.nupkg.sha512",
+        "serilog.sinks.coloredconsole.nuspec"
       ]
     },
     "System.Collections/4.0.11": {
@@ -2882,11 +2929,12 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Itinero.Geo >= 0.39.0-rc1",
+      "Itinero.Geo >= 0.40.5-rc1",
       "Itinero.VectorTiles >= 1.0.0-*",
       "Itinero.VectorTiles.Mapbox >= 1.0.0-*",
       "NetTopologySuite.IO.GeoJSON >= 1.14.0",
       "Newtonsoft.Json >= 9.0.1",
+      "Serilog.Sinks.ColoredConsole >= 2.0.0",
       "mapbox-vector-tile >= 3.1.4"
     ],
     ".NETFramework,Version=v4.5.1": [

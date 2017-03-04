@@ -39,9 +39,12 @@ namespace Itinero.VectorTiles
         /// <summary>
         /// Extracts segments for the given tile.
         /// </summary>
-        public static Segment[] ExtractSegments(this RouterDb routerDb, ulong tileId, 
-            Func<ushort, uint, bool> includeProfile = null)
+        public static Segment[] ExtractSegments(this RouterDb routerDb, ulong tileId,
+            SegmentLayerConfig config)
         {
+            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
+
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
             var diffY = (tile.Right - tile.Left);
@@ -76,8 +79,8 @@ namespace Itinero.VectorTiles
                     var edgeData = edgeEnumerator.Data;
 
                     // check if this edge needs to be included or not.
-                    if (includeProfile != null &&
-                        !includeProfile(edgeData.Profile, edgeData.MetaId))
+                    if (config != null && config.IncludeProfileFunc != null &&
+                        !config.IncludeProfileFunc(edgeData.Profile, edgeData.MetaId))
                     { // include profile returns false
                         continue;
                     }
@@ -146,26 +149,32 @@ namespace Itinero.VectorTiles
         /// <summary>
         /// Extracts a segment layer for the given tile.
         /// </summary>
-        public static SegmentLayer ExtractSegmentLayer(this RouterDb routerDb, ulong tileId, string layerName,
-            Func<ushort, uint, bool> includeProfile = null)
+        public static SegmentLayer ExtractSegmentLayer(this RouterDb routerDb, ulong tileId,
+            SegmentLayerConfig config)
         {
+            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
+
             return new SegmentLayer()
             {
                 Meta = routerDb.EdgeMeta,
                 Profiles = routerDb.EdgeProfiles,
-                Name = layerName,
-                Segments = routerDb.ExtractSegments(tileId, includeProfile)
+                Name = config.Name,
+                Segments = routerDb.ExtractSegments(tileId, config)
             };
         }
 
         /// <summary>
         /// Extracts a vector tile of the given tile.
         /// </summary>
-        public static VectorTile ExtractTile(this RouterDb routerDb, ulong tileId, string layerName,
-            Func<ushort, uint, bool> includeProfile = null)
+        public static VectorTile ExtractTile(this RouterDb routerDb, ulong tileId, 
+            SegmentLayerConfig config)
         {
+            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
+            
             var layers = new List<Layer>(1);
-            layers.Add(routerDb.ExtractSegmentLayer(tileId, layerName, includeProfile));
+            layers.Add(routerDb.ExtractSegmentLayer(tileId, config));
 
             return new VectorTile()
             {

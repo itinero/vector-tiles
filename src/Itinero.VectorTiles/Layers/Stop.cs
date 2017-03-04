@@ -20,41 +20,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Itinero.Transit.Data;
-using Itinero.VectorTiles.Layers;
-using System;
-using System.Collections.Generic;
-
-namespace Itinero.VectorTiles
+namespace Itinero.VectorTiles.Layers
 {
     /// <summary>
-    /// Contains extension methods for the multimodal db.
+    /// Represents a point.
     /// </summary>
-    public static class MultimodalDbExtensions
+    public class Stop
     {
         /// <summary>
-        /// Extract data for the given tile.
+        /// Gets or sets the latitude.
         /// </summary>
-        public static VectorTile ExtractTile(this MultimodalDb db, ulong tileId, VectorTileConfig config)
-        {
-            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+        public float Latitude { get; set; }
 
-            var layers = new List<Layer>();
+        /// <summary>
+        /// Gets or sets the longitude.
+        /// </summary>
+        public float Longitude { get; set; }
 
-            if (config.SegmentLayerConfig != null)
-            {
-                layers.Add(db.RouterDb.ExtractSegmentLayer(tileId, config.SegmentLayerConfig));
-            }
-            if (config.StopLayerConfig != null)
-            {
-                layers.Add(db.TransitDb.ExtractPointLayerForStops(tileId, config.StopLayerConfig));
-            }
-
-            return new VectorTile()
-            {
-                Layers = layers,
-                TileId = tileId
-            };
-        }
+        /// <summary>
+        /// Gets or sets the meta id.
+        /// </summary>
+        public uint MetaId { get; set; }
     }
 }

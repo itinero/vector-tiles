@@ -27,12 +27,12 @@ namespace Itinero.VectorTiles.Layers
     /// <summary>
     /// Represents a layer with points.
     /// </summary>
-    public class PointLayer : Layer
+    public class StopLayer : Layer
     {
         /// <summary>
         /// Gets or sets the points.
         /// </summary>
-        public Point[] Points { get; set; }
+        public Stop[] Points { get; set; }
 
         /// <summary>
         /// Gets or sets the meta index.

@@ -166,9 +166,9 @@ namespace Itinero.VectorTiles.Mapbox
                         layer.Features.Add(feature);
                     }
                 }
-                else if (localLayer is PointLayer)
+                else if (localLayer is StopLayer)
                 {
-                    var pointLayer = localLayer as PointLayer;
+                    var pointLayer = localLayer as StopLayer;
                     var points = pointLayer.Points;
                     var metaIndex = pointLayer.Meta;
 

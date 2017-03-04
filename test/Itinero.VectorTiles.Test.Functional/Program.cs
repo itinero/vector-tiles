@@ -20,8 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using Itinero.Transit.Data;
 using Itinero.VectorTiles.GeoJson;
+using Itinero.VectorTiles.Layers;
 using Mapbox.Vector.Tile;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -31,38 +35,50 @@ namespace Itinero.VectorTiles.Test.Functional
     {
         public static void Main(string[] args)
         {
-            var routerDb = RouterDb.Deserialize(File.OpenRead(@"C:\work\data\routing\belgium.c.cf.routerdb"));
+            Itinero.Logging.Logger.LogAction = (o, level, message, parameters) =>
+            {
+                Log.Information(string.Format("[{0}] {1} - {2}", o, level, message));
+            };
 
-            var tile = Tiles.Tile.CreateAroundLocation(51.267966846313556f, 4.801913201808929f, 10);
+            // attach logger.
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.ColoredConsole()
+                .CreateLogger();
+       
+            // load multimodal db and extract tiles.
+            var multimodalDb = MultimodalDb.Deserialize(File.OpenRead(@"C:\work\data\routing\belgium.multimodaldb"));
+            var tile = Tiles.Tile.CreateAroundLocation(51.267966846313556f, 4.801913201808929f, 9);
             var tileRange = tile.GetSubTiles(14);
 
-            foreach (var t in tileRange)
+            var func = new Action(() =>
             {
-                var vectorTile = routerDb.ExtractTile(t.Id, "transportation");
-
-                //var tileGeoJson = Itinero.VectorTiles.GeoJson.GeoJsonTileWriter.ToGeoJson(segments, routerDb);
-
-                using (var stream = File.Open(t.Id.ToInvariantString() + ".mvt", FileMode.Create))
+                foreach (var t in tileRange)
                 {
-                    Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(vectorTile, stream);
+                    var config = new VectorTileConfig()
+                    {
+                        SegmentLayerConfig = new SegmentLayerConfig()
+                        {
+                            Name = "transportation"
+                        },
+                        StopLayerConfig = new StopLayerConfig()
+                        {
+                            Name = "stops"
+                        }
+                    };
 
-                    //stream.Flush();
-                    //stream.Seek(0, SeekOrigin.Begin);
-                    //var parsed = global::Mapbox.Vector.Tile.VectorTileParser.Parse(stream);
-                    //var geoJson = parsed[0].ToGeoJSON(t.X, t.Y, t.Zoom);
-                    //var json = Newtonsoft.Json.JsonConvert.SerializeObject(geoJson);
+                    //Log.Information("Extracting tile: {0}", t.ToInvariantString());
+                    var vectorTile = multimodalDb.ExtractTile(t.Id, config);
 
+                    //Log.Information("Writing tile: {0}", t.ToInvariantString());
+                    using (var stream = File.Open(t.Id.ToInvariantString() + ".mvt", FileMode.Create))
+                    {
+                        Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(vectorTile, stream);
+                    }
                 }
-            }
-        }
+            });
+            func.TestPerf(string.Format("Extracted and written {0} tiles.", tileRange.Count));
 
-        //private static string ToJson(FeatureCollection featureCollection)
-        //{
-        //    var jsonSerializer = new NetTopologySuite.IO.GeoJsonSerializer();
-        //    var jsonStream = new StringWriter();
-        //    jsonSerializer.Serialize(jsonStream, featureCollection);
-        //    var json = jsonStream.ToInvariantString();
-        //    return json;
-        //}
+            Console.ReadLine();
+        }
     }
 }

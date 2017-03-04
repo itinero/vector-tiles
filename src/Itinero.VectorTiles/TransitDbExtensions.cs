@@ -37,9 +37,12 @@ namespace Itinero.VectorTiles
         /// <summary>
         /// Extracts a tile of stops.
         /// </summary>
-        public static Point[] ExtractPointsForStops(this TransitDb transitDb, ulong tileId,
-            Func<StopsDb.Enumerator, bool> includeStops = null)
+        public static Stop[] ExtractPointsForStops(this TransitDb transitDb, ulong tileId,
+            StopLayerConfig config)
         {
+            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
+
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
             var diffY = (tile.Right - tile.Left);
@@ -54,19 +57,19 @@ namespace Itinero.VectorTiles
                 tileBox.MinLat - diffY, tileBox.MinLon - diffX,
                 tileBox.MaxLat + diffY, tileBox.MaxLon + diffX);
 
-            var stops = new Point[stopIds.Count];
+            var stops = new Stop[stopIds.Count];
             var i = 0;
             foreach (var stopId in stopIds)
             {
                 stopsEnumerator.MoveTo(stopId);
 
-                if (includeStops != null &&
-                   !includeStops(stopsEnumerator))
+                if (config != null && config.IncludeStopsFunc != null &&
+                   !config.IncludeStopsFunc(stopsEnumerator))
                 { // explicitly excluded this stop.
                     continue;
                 }
 
-                stops[i] = new Point()
+                stops[i] = new Stop()
                 {
                     Latitude = stopsEnumerator.Latitude,
                     Longitude = stopsEnumerator.Longitude,
@@ -81,25 +84,31 @@ namespace Itinero.VectorTiles
         /// <summary>
         /// Extracts a tile of stops.
         /// </summary>
-        public static PointLayer ExtractPointLayerForStops(this TransitDb transitDb, ulong tileId, string layerName,
-            Func<StopsDb.Enumerator, bool> includeStops = null)
+        public static StopLayer ExtractPointLayerForStops(this TransitDb transitDb, ulong tileId,
+            StopLayerConfig config)
         {
-            return new PointLayer()
+            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
+
+            return new StopLayer()
             {
                 Meta = transitDb.StopAttributes,
-                Name = layerName,
-                Points = transitDb.ExtractPointsForStops(tileId, includeStops)
+                Name = config.Name,
+                Points = transitDb.ExtractPointsForStops(tileId, config)
             };
         }
 
         /// <summary>
         /// Extracts a tile of stops.
         /// </summary>
-        public static VectorTile ExtractTileForStops(this TransitDb transitDb, ulong tileId, string layerName,
-            Func<StopsDb.Enumerator, bool> includeStops = null)
+        public static VectorTile ExtractTileForStops(this TransitDb transitDb, ulong tileId,
+            StopLayerConfig config)
         {
+            if (config == null) { throw new ArgumentNullException(nameof(config)); }
+            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
+
             var layers = new List<Layer>(1);
-            layers.Add(transitDb.ExtractPointLayerForStops(tileId, layerName, includeStops));
+            layers.Add(transitDb.ExtractPointLayerForStops(tileId, config));
 
             return new VectorTile()
             {
