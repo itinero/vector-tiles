@@ -209,6 +209,8 @@ namespace Itinero.VectorTiles.Mapbox
                                 feature.Tags.Add(valueId);
                             }
                         }
+                        
+                        layer.Features.Add(feature);
                     }
                 }
                 else
