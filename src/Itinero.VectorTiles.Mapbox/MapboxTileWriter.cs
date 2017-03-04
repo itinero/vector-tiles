@@ -35,7 +35,7 @@ namespace Itinero.VectorTiles.Mapbox
         /// Writes the tile to the given stream.
         /// </summary>
         public static void Write(this VectorTile vectorTile, Stream stream,
-            Func<IAttributeCollection, IAttributeCollection> mapAttributes = null, uint extent = 4096)
+            Func<IAttributeCollection, Itinero.VectorTiles.Layers.Layer, IAttributeCollection> mapAttributes = null, uint extent = 4096)
         {
             var tile = new Tiles.Tile(vectorTile.TileId);
 
@@ -97,7 +97,7 @@ namespace Itinero.VectorTiles.Mapbox
                                 attributes.AddOrReplace(a);
                             }
 
-                            attributes = mapAttributes(attributes);
+                            attributes = mapAttributes(attributes, localLayer);
 
                             foreach (var attribute in attributes)
                             {
@@ -186,7 +186,7 @@ namespace Itinero.VectorTiles.Mapbox
                         var attributes = metaIndex.Get(point.MetaId);
                         if (mapAttributes != null)
                         {
-                            attributes = mapAttributes(attributes);
+                            attributes = mapAttributes(attributes, localLayer);
                         }
                         
                         if (attributes != null)
