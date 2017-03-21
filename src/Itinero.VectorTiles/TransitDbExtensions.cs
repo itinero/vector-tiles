@@ -43,6 +43,11 @@ namespace Itinero.VectorTiles
             if (config == null) { throw new ArgumentNullException(nameof(config)); }
             if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
 
+            if (transitDb.StopsCount == 0)
+            {
+                return new Stop[0];
+            }
+
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
             var diffY = (tile.Right - tile.Left);
