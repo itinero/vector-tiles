@@ -87,9 +87,14 @@ namespace Itinero.VectorTiles
 
                     // get shape.
                     var coordinateTo = routerDb.Network.GetVertex(edgeEnumerator.To);
-                    //var enumShapeCount = edgeEnumerator.FillShape(coordinateFrom, coordinateTo, enumShape);
                     var shape = new List<Coordinate>();
                     var enumShape = routerDb.Network.GetShape(edgeEnumerator.Current);
+                    
+                    // reverse shape if edge is reversed.
+                    if (edgeEnumerator.DataInverted)
+                    {
+                        enumShape.Reverse();
+                    }
 
                     // split at tile edges.
                     var previous = false;
