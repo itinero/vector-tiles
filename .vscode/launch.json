@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/samples/VectorTileWeb/bin/Debug/netcoreapp1.0/VectorTileWeb.dll",
+            "program": "${workspaceFolder}/samples/Itinero.VectorTiles.MapboxGL/bin/Debug/netcoreapp2.0/Itinero.VectorTiles.MapboxGL.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/samples/VectorTileWeb",
+            "cwd": "${workspaceFolder}/samples/Itinero.VectorTiles.MapboxGL",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {

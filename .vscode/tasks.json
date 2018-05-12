@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/samples/VectorTileWeb/VectorTileWeb.csproj"
+                "${workspaceFolder}/samples/Itinero.VectorTiles.MapboxGL/Itinero.VectorTiles.MapboxGL.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

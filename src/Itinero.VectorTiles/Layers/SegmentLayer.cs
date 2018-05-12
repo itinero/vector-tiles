@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 using Itinero.Attributes;
+using Itinero.Data.Network.Edges;
 
 namespace Itinero.VectorTiles.Layers
 {
@@ -43,5 +44,10 @@ namespace Itinero.VectorTiles.Layers
         /// Gets or sets the meta index.
         /// </summary>
         public AttributesIndex Meta { get; set; }
+
+        /// <summary>
+        /// Gets or sets the edges meta data.
+        /// </summary>
+        public MetaCollectionDb EdgeMeta { get; set; }
     }
 }

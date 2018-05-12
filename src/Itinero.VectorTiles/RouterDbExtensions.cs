@@ -141,6 +141,7 @@ namespace Itinero.VectorTiles
                         {
                             Meta = edgeData.MetaId,
                             Profile = edgeData.Profile,
+                            EdgeId = edgeEnumerator.Id,
                             Shape = shape.ToArray()
                         });
                         shape.Clear();
@@ -164,6 +165,7 @@ namespace Itinero.VectorTiles
             {
                 Meta = routerDb.EdgeMeta,
                 Profiles = routerDb.EdgeProfiles,
+                EdgeMeta = routerDb.EdgeData,
                 Name = config.Name,
                 Segments = routerDb.ExtractSegments(tileId, config)
             };

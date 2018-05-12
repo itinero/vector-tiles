@@ -43,5 +43,10 @@ namespace Itinero.VectorTiles.Layers
         /// Gets or sets the meta id.
         /// </summary>
         public uint Meta { get; set; }
+
+        /// <summary>
+        /// Gets or sets the edge id.
+        /// </summary>
+        public uint EdgeId { get; set; }
     }
 }
