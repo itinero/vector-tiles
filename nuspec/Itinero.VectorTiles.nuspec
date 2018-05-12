@@ -12,22 +12,13 @@
     <iconUrl>http://www.itinero.tech/logos/itinero_logo_notext.svg.128.png</iconUrl>
     <tags></tags>
     <dependencies>
-      <group targetFramework=".NETFramework4.5">
-        <dependency id="Itinero" version="[0.38.21-rc1, )" />
-        <dependency id="NETStandard.Library" version="[1.6.0, )" />
-      </group>
       <group targetFramework=".NETStandard1.6">
-        <dependency id="Itinero" version="[0.38.21-rc1, )" />
+        <dependency id="Itinero" version="[1.4.0-pre38, )" />
         <dependency id="NETStandard.Library" version="[1.6.0, )" />
       </group>
     </dependencies>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.5" />
-      <frameworkAssembly assemblyName="System.Data" targetFramework=".NETFramework4.5" />
-    </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="src\Itinero.VectorTiles\bin\Release\net45\Itinero.VectorTiles.dll" target="lib\net45\Itinero.VectorTiles.dll" />
     <file src="src\Itinero.VectorTiles\bin\Release\netstandard1.6\Itinero.VectorTiles.dll" target="lib\netstandard1.6\Itinero.VectorTiles.dll" />
   </files>
 </package>
