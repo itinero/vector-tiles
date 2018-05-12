@@ -1,6 +1,6 @@
 {
   "version": 8,
-  "name": "Anyways Bright",
+  "name": "Bright (Only Roads)",
   "metadata": {
     "mapbox:type": "template",
     "mapbox:groups": {
@@ -185,26 +185,6 @@
           "class",
           "service",
           "track"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detour",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detourbike",
-          "yes"
         ]
       ],
       "layout": {
@@ -505,26 +485,6 @@
           "==",
           "class",
           "motorway_link"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detour",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detourbike",
-          "yes"
         ]
       ],
       "layout": {
@@ -585,26 +545,6 @@
           "motorway",
           "motorway_link",
           "primary"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detour",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detourbike",
-          "yes"
         ]
       ],
       "layout": {
@@ -666,26 +606,6 @@
             "minor",
             "service",
             "track"
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detour",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:localaccess",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detourbike",
-            "yes"
           ]
         ]
       ],
@@ -751,16 +671,6 @@
           "class",
           "secondary",
           "tertiary"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
         ]
       ],
       "layout": {
@@ -808,26 +718,6 @@
           "class",
           "primary",
           "trunk"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detour",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detourbike",
-          "yes"
         ]
       ],
       "layout": {
@@ -1013,26 +903,6 @@
           "==",
           "class",
           "motorway_link"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detour",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detourbike",
-          "yes"
         ]
       ],
       "layout": {
@@ -1088,26 +958,6 @@
           "secondary_link",
           "tertiary_link",
           "trunk_link"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detour",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detourbike",
-          "yes"
         ]
       ],
       "layout": {
@@ -1135,252 +985,6 @@
             [
               20,
               11.5
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "highway-path-copy",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "LineString"
-        ],
-        [
-          "all",
-          [
-            "!in",
-            "brunnel",
-            "bridge",
-            "tunnel"
-          ],
-          [
-            "==",
-            "anyways:construction",
-            "yes"
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "rgba(12, 12, 12, 1)",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              15,
-              2
-            ],
-            [
-              20,
-              18
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "highway-path-copy2",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "LineString"
-        ],
-        [
-          "all",
-          [
-            "!in",
-            "brunnel",
-            "bridge",
-            "tunnel"
-          ],
-          [
-            "==",
-            "anyways:localaccess",
-            "yes"
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "rgba(0, 0, 0, 1)",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              15,
-              2
-            ],
-            [
-              20,
-              18
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "highway-minor-detour",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "LineString"
-        ],
-        [
-          "all",
-          [
-            "!=",
-            "brunnel",
-            "tunnel"
-          ],
-          [
-            "in",
-            "class",
-            "minor",
-            "service",
-            "track",
-            "residential",
-            "motorway",
-            "motorway_link",
-            "primary"
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "==",
-            "anyways:detour",
-            "yes"
-          ],
-		  [
-            "!=",
-            "anyways:localaccess",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detourbike",
-            "yes"
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "rgba(0, 0, 255, 1)",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              8,
-              0.5
-            ],
-            [
-              20,
-              13
-            ]
-          ]
-        }
-      }
-    },
-	{
-      "id": "highway-minor-detourbike",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "LineString"
-        ],
-        [
-          "all",
-          [
-            "in",
-            "class",
-            "minor",
-            "service",
-            "track",
-            "residential",
-            "motorway",
-            "motorway_link",
-            "primary",
-			"path",
-			"unclassified"
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "==",
-            "anyways:detourbike",
-            "yes"
-          ],
-		  [
-            "!=",
-            "anyways:localaccess",
-            "yes"
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "rgba(255, 216, 0, 1)",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              8,
-              0.5
-            ],
-            [
-              20,
-              13
             ]
           ]
         }
@@ -1418,26 +1022,6 @@
             "motorway",
             "motorway_link",
             "primary"
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detour",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:localaccess",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detourbike",
-            "yes"
           ]
         ]
       ],
@@ -1488,26 +1072,6 @@
           "class",
           "secondary",
           "tertiary"
-        ],
-        [
-          "!=",
-          "anyways:construction",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detour",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:localaccess",
-          "yes"
-        ],
-        [
-          "!=",
-          "anyways:detourbike",
-          "yes"
         ]
       ],
       "layout": {
@@ -1531,353 +1095,6 @@
             [
               20,
               13
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "highway-secondary-tertiary-construction-copy2",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "!in",
-          "brunnel",
-          "bridge"
-        ],
-        [
-          "in",
-          "class",
-          "secondary",
-          "tertiary",
-          "minor",
-          "residential",
-          "motorway",
-          "motorway_link",
-          "primary",
-          "service",
-          "cycleway"
-        ],
-        [
-          "==",
-          "anyways:construction",
-          "yes"
-        ]
-      ],
-      "layout": {
-        "line-cap": "square",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-color": "rgba(242, 255, 0, 1)",
-        "line-dasharray": [
-          1.5,
-          1
-        ],
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              8,
-              0.4
-            ],
-            [
-              20,
-              10
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "highway-secondary-tertiary-construction-copy",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "!in",
-          "brunnel",
-          "bridge",
-          "tunnel"
-        ],
-        [
-          "in",
-          "class",
-          "secondary",
-          "tertiary",
-          "minor",
-          "residential",
-          "motorway",
-          "motorway_link",
-          "primary",
-          "service",
-		  "cycleway"
-        ],
-        [
-          "==",
-          "anyways:localaccess",
-          "yes"
-        ]
-      ],
-      "layout": {
-        "line-cap": "square",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-color": "rgba(21, 255, 0, 1)",
-        "line-dasharray": [
-          0.5,
-          0.5
-        ],
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              8,
-              0.4
-            ],
-            [
-              20,
-              10
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "highway-secondary-tertiary-detour",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "!in",
-          "brunnel",
-          "bridge",
-          "tunnel"
-        ],
-        [
-          "in",
-          "class",
-          "secondary",
-          "tertiary"
-        ],
-        [
-          "==",
-          "anyways:detour",
-          "yes"
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-color": "rgba(0, 0, 255, 1)",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              8,
-              0.5
-            ],
-            [
-              20,
-              13
-            ]
-          ]
-        }
-      }
-    },
-	{
-      "id": "highway-minor-detourHGV",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "LineString"
-        ],
-        [
-          "all",
-          [
-            "!=",
-            "brunnel",
-            "tunnel"
-          ],
-          [
-            "in",
-            "class",
-            "minor",
-            "service",
-            "track",
-            "residential",
-            "motorway",
-            "motorway_link",
-            "primary",
-			"secondary",
-			"tertiary"
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "==",
-            "anyways:detourHGV",
-            "yes"
-          ],
-		  [
-            "!=",
-            "anyways:detour",
-            "yes"
-          ],
-		  [
-            "!=",
-            "anyways:localaccess",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detourbike",
-            "yes"
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "rgba(255, 50, 173, 1)",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              8,
-              0.5
-            ],
-            [
-              20,
-              13
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "highway-trunk-primary",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4436"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "LineString"
-        ],
-        [
-          "all",
-          [
-            "!in",
-            "brunnel",
-            "bridge",
-            "tunnel"
-          ],
-          [
-            "in",
-            "class",
-            "primary",
-            "trunk"
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detour",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:localaccess",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detourbike",
-            "yes"
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-color": "#fea",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              7,
-              0.5
-            ],
-            [
-              20,
-              18
             ]
           ]
         }
@@ -1911,16 +1128,6 @@
             "==",
             "class",
             "motorway"
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:localaccess",
-            "yes"
           ]
         ]
       ],
@@ -2524,87 +1731,6 @@
             [
               20,
               18
-            ]
-          ]
-        }
-      }
-    },
-	{
-      "id": "highway-minor-detour_2",
-      "type": "line",
-      "metadata": {
-        "mapbox:group": "1444849345966.4437"
-      },
-      "source": "roadtiles",
-      "source-layer": "transportation",
-      "filter": [
-        "all",
-        [
-          "==",
-          "$type",
-          "LineString"
-        ],
-        [
-          "all",
-          [
-            "!=",
-            "brunnel",
-            "tunnel"
-          ],
-          [
-            "in",
-            "class",
-            "minor",
-            "service",
-            "track",
-            "residential",
-            "motorway",
-            "motorway_link",
-            "primary",
-            "secondary"			
-          ],
-          [
-            "!=",
-            "anyways:construction",
-            "yes"
-          ],
-          [
-            "==",
-            "anyways:detour2",
-            "yes"
-          ],
-		  [
-            "!=",
-            "anyways:localaccess",
-            "yes"
-          ],
-          [
-            "!=",
-            "anyways:detourbike",
-            "yes"
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "rgba(66, 244, 232, 1)",
-        "line-width": {
-          "base": 1.2,
-          "stops": [
-            [
-              6.5,
-              0
-            ],
-            [
-              8,
-              0.5
-            ],
-            [
-              20,
-              13
             ]
           ]
         }
