@@ -6,6 +6,8 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='/mapbox-gl-js/v0.45.0/mapbox-gl.js'></script>
     <link href='/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='/mapbox-gl-inspect/mapbox-gl-inspect.min.js'></script>
+    <link href='/mapbox-gl-inspect/mapbox-gl-inspect.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -20,6 +22,10 @@
             center: [4.78639, 51.2634], // starting position [lng, lat]
             zoom: 15 // starting zoom
         });
+
+        map.addControl(new MapboxInspect({
+            showInspectMap: true
+        }));
     </script>
 </body>
 </html>
