@@ -154,10 +154,27 @@ namespace Itinero.VectorTiles.Mapbox
                 layer.Keys.AddRange(keys.Keys);
                 foreach (var value in values.Keys)
                 {
-                    layer.Values.Add(new Tile.Value()
+                    if (int.TryParse(value, out var intValue))
                     {
-                        StringValue = value
-                    });
+                        layer.Values.Add(new Tile.Value()
+                        {
+                            IntValue = intValue
+                        });
+                    }
+                    else if (float.TryParse(value, out var floatValue))
+                    {
+                        layer.Values.Add(new Tile.Value()
+                        {
+                            FloatValue = floatValue
+                        });
+                    }
+                    else
+                    {
+                        layer.Values.Add(new Tile.Value()
+                        {
+                            StringValue = value
+                        });
+                    }
                 }
                 mapboxTile.Layers.Add(layer);
             }
