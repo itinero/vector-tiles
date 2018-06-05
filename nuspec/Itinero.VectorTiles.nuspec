@@ -13,7 +13,8 @@
     <tags></tags>
     <dependencies>
       <group targetFramework=".NETStandard1.6">
-        <dependency id="Itinero" version="[1.4.0-pre38, )" />
+        <dependency id="Itinero" version="[1.4.0-pre59, )" />
+        <dependency id="Itinero.Transit" version="[0.4.2-alpha, )" />
         <dependency id="NETStandard.Library" version="[1.6.0, )" />
       </group>
     </dependencies>

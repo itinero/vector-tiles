@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Itinero" Version="1.4.0-pre38" />
-    <PackageReference Include="Itinero.Transit" Version="0.3.2-alpha" />
+    <PackageReference Include="Itinero" Version="1.4.0-pre59" />
+    <PackageReference Include="Itinero.Transit" Version="0.4.2-alpha" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
   </ItemGroup>
 
