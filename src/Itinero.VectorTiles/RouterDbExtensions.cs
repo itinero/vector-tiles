@@ -128,7 +128,8 @@ namespace Itinero.VectorTiles
                             {
                                 Meta = edgeData.MetaId,
                                 Profile = edgeData.Profile,
-                                Shape = shape.ToArray()
+                                Shape = shape.ToArray(),
+                                EdgeId = edgeEnumerator.Id,
                             });
                             shape.Clear();
                             previous = false;
