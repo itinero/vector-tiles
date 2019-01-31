@@ -16,7 +16,7 @@ namespace Itinero.VectorTiles.Layers
         ///
         /// If this returns null the vertex is not included.
         /// </summary>
-        public Func<uint, IEnumerable<Attribute>> GetAttributesFunc { get; set; }
+        public Func<uint, int, IEnumerable<Attribute>> GetAttributesFunc { get; set; }
 
         /// <summary>
         /// Creates a new layer based on this configuration.

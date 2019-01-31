@@ -65,8 +65,9 @@ namespace Itinero.VectorTiles.Test.Functional
                                 Name = "cyclenetwork",
                                 GetAttributesFunc = (edgeId, zoom) =>
                                 {
-                                    var edge = routerDb.Network.GetEdge(edgeId);
-                                    var attributes = routerDb.GetProfileAndMeta(edge.Data.Profile, edge.Data.MetaId);
+                                    var attributes = routerDb.GetEdgeAttributes(edgeId);
+                                    if (attributes == null) return null;
+                                    
                                     var ok = attributes.Any(a => a.Key == "cyclenetwork");
                                     if (!ok)
                                     {
@@ -81,7 +82,7 @@ namespace Itinero.VectorTiles.Test.Functional
                             new VertexLayerConfig()
                             {
                                 Name = "cyclenodes",
-                                GetAttributesFunc = (vertex) =>
+                                GetAttributesFunc = (vertex, zoom) =>
                                 {
                                     var attributes = routerDb.GetVertexAttributes(vertex);
                                     var ok = attributes.Any(a => a.Key == "rcn_ref");

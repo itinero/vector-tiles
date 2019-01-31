@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Itinero.Attributes;
 using Itinero.VectorTiles.Layers;
 using Itinero.VectorTiles.Mapbox;
 using Microsoft.AspNetCore.Mvc;
@@ -25,76 +26,7 @@ namespace Itinero.VectorTiles.MapboxGL.Controllers
             var stream = new MemoryStream();
             lock(Program.RouterDb)
             {
-                vectorTile.Value.Write(stream, (a, l) =>
-                {
-                    if (l.Name != "transportation")
-                    {
-                        return a;
-                    }
-
-                    var result = new Attributes.AttributeCollection();
-                    if (a.TryGetValue("highway", out var highway))
-                    {
-                        var className = string.Empty;
-                        switch (highway)
-                        {
-                            case "motorway":
-                            case "motorway_link":
-                                className = "motorway";
-                                break;
-                            case "trunk":
-                            case "trunk_link":
-                                className = "trunk";
-                                break;
-                            case "primary":
-                            case "primary_link":
-                                className = "primary";
-                                break;
-                            case "secondary":
-                            case "secondary_link":
-                                className = "secondary";
-                                break;
-                            case "tertiary":
-                            case "tertiary_link":
-                                className = "tertiary";
-                                break;
-                            case "unclassified":
-                            case "residential":
-                            case "living_street":
-                            case "road":
-                                className = "minor";
-                                break;
-                            case "service":
-                            case "track":
-                                className = highway;
-                                break;
-                            case "pedestrian":
-                            case "path":
-                            case "footway":
-                            case "cycleway":
-                            case "steps":
-                            case "bridleway":
-                            case "corridor":
-                                className = "path";
-                                break;
-                        }
-                        if (!string.IsNullOrEmpty(className))
-                        {
-                            result.AddOrReplace("class", className);
-                        }
-                    }
-
-                    foreach (var tag in a)
-                    {
-                        if (tag.Key == "highway")
-                        {
-                            continue;
-                        }
-
-                        result.AddOrReplace(tag.Key, tag.Value);
-                    }
-                    return result;
-                });
+                vectorTile.Value.Write(stream);
             }
             stream.Seek(0, SeekOrigin.Begin);
 
@@ -113,23 +45,98 @@ namespace Itinero.VectorTiles.MapboxGL.Controllers
 
                 var config = new VectorTileConfig()
                 {
-                    EdgeLayerConfig = new EdgeLayerConfig()
+                    EdgeLayerConfigs = new List<EdgeLayerConfig>()
                     {
-                        Name = "transportation",
-                        IncludeProfileFunc = (p, m) =>
+                        new EdgeLayerConfig()
                         {
-                            if (z > Program.ProfilesPerZoom.Length)
+                            Name = "transportation",
+                            GetAttributesFunc = (edgeId, zoom) =>
                             {
-                                return true;
-                            }
+                                HashSet<ushort> profilesPerZoom = null;
+                                if (z < Program.ProfilesPerZoom.Length)
+                                {
+                                    profilesPerZoom = Program.ProfilesPerZoom[z];
+                                }
 
-                            var profileSet = Program.ProfilesPerZoom[z];
-                            if (profileSet == null)
-                            {
-                                return false;
-                            }
+                                var edge = Program.RouterDb.Network.GetEdge(edgeId);
+                                if (profilesPerZoom != null &&
+                                    !profilesPerZoom.Contains(edge.Data.Profile))
+                                {
+                                    // don't return edges of this type at this zoom.
+                                    return null;
+                                }
 
-                            return profileSet.Contains(p);
+                                // filter and convert attributes.
+                                var a = new AttributeCollection(Program.RouterDb.GetEdgeAttributes(edgeId));
+                                var result = new Attributes.AttributeCollection();
+                                if (a.TryGetValue("highway", out var highway))
+                                {
+                                    var className = string.Empty;
+                                    switch (highway)
+                                    {
+                                        case "motorway":
+                                        case "motorway_link":
+                                            className = "motorway";
+                                            break;
+                                        case "trunk":
+                                        case "trunk_link":
+                                            className = "trunk";
+                                            break;
+                                        case "primary":
+                                        case "primary_link":
+                                            className = "primary";
+                                            break;
+                                        case "secondary":
+                                        case "secondary_link":
+                                            className = "secondary";
+                                            break;
+                                        case "tertiary":
+                                        case "tertiary_link":
+                                            className = "tertiary";
+                                            break;
+                                        case "unclassified":
+                                        case "residential":
+                                        case "living_street":
+                                        case "road":
+                                            className = "minor";
+                                            break;
+                                        case "service":
+                                        case "track":
+                                            className = highway;
+                                            break;
+                                        case "pedestrian":
+                                        case "path":
+                                        case "footway":
+                                        case "cycleway":
+                                        case "steps":
+                                        case "bridleway":
+                                        case "corridor":
+                                            className = "path";
+                                            break;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(className))
+                                    {
+                                        result.AddOrReplace("class", className);
+                                    }
+                                }
+                                else
+                                { // no highway tag.
+                                    return null;
+                                }
+
+                                foreach (var tag in a)
+                                {
+                                    if (tag.Key == "highway")
+                                    {
+                                        continue;
+                                    }
+
+                                    result.AddOrReplace(tag.Key, tag.Value);
+                                }
+
+                                return result;
+                            }
                         }
                     }
                 };

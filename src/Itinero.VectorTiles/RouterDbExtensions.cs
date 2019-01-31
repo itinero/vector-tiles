@@ -71,7 +71,7 @@ namespace Itinero.VectorTiles
                 // add vertex to each layer that wants it.
                 foreach (var vertexLayer in vertexLayers)
                 {
-                    if (vertexLayer.Config.GetAttributesFunc(vertex) != null)
+                    if (vertexLayer.Config.GetAttributesFunc(vertex, tile.Zoom) != null)
                     {
                         vertexLayer.Vertices.Add(new Vertex()
                         {
@@ -220,6 +220,51 @@ namespace Itinero.VectorTiles
             foreach (var a in attributes)
             {
                 yield return a;
+            }
+        }
+        
+        /// <summary>
+        /// Gets all data from the edge meta collections for the given segment.
+        /// </summary>
+        /// <param name="routerDb">The router db.</param>
+        /// <param name="edgeId">The edge.</param>
+        /// <returns>An enumerable of attributes associated with the given edge.</returns>
+        public static IEnumerable<Attribute> GetEdgeAttributes(this RouterDb routerDb, uint edgeId)
+        {
+            var edge = routerDb.Network.GetEdge(edgeId);
+
+            var profileMeta = routerDb.EdgeProfiles.Get(edge.Data.Profile);
+            if (profileMeta != null)
+            {
+                foreach (var a in profileMeta)
+                {
+                    yield return a;
+                }
+            }
+
+            var edgeMeta = routerDb.EdgeMeta.Get(edge.Data.MetaId);
+            if (edgeMeta != null)
+            {
+                foreach (var a in edgeMeta)
+                {
+                    yield return a;
+                }
+            }
+
+            if (routerDb.EdgeData == null) yield break;
+            var edgeData = routerDb.EdgeData;
+            foreach (var metaName in routerDb.EdgeData.Names)
+            {
+                var edgeMetaCollection = edgeData.Get(metaName);
+                var edgeMetaData = edgeMetaCollection.GetRaw(edgeId);
+                var key = metaName;
+                var value = string.Empty;
+                if (edgeMetaData != null)
+                {
+                    value = edgeMetaData.ToInvariantString();
+                }
+
+                yield return new Attribute(key, value);
             }
         }
     }
