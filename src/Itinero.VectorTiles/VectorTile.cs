@@ -22,6 +22,7 @@
 
 using Itinero.VectorTiles.Layers;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Itinero.VectorTiles
 {
@@ -39,5 +40,10 @@ namespace Itinero.VectorTiles
         /// Gets or sets the layers.
         /// </summary>
         public List<Layer> Layers { get; set; }
+
+        /// <summary>
+        /// Gets the is empty flag.
+        /// </summary>
+        public bool IsEmpty => this.Layers == null || this.Layers.All(x => x.IsEmpty);
     }
 }

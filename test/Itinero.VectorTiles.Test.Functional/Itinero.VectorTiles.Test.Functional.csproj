@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -11,10 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="1.15.0-pre059"/>
-    <PackageReference Include="NetTopologySuite" Version="1.15.0-pre059"/>
-    <PackageReference Include="mapbox-vector-tile" Version="3.1.4" />
-    <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="2.0.0" />
+    <PackageReference Include="Itinero.IO.Osm" Version="1.4.0-pre92" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
   </ItemGroup>
 
 </Project>

@@ -47,22 +47,18 @@ namespace Itinero.VectorTiles.Mapbox
             var mapboxTile = new Mapbox.Tile();
             foreach (var localLayer in vectorTile.Layers)
             {
-                var layer = new Mapbox.Tile.Layer();
-                layer.Version = 2;
-                layer.Name = localLayer.Name;
-                layer.Extent = extent;
+                var layer = new Mapbox.Tile.Layer {Version = 2, Name = localLayer.Name, Extent = extent};
 
                 var keys = new Dictionary<string, uint>();
                 var values = new Dictionary<string, uint>();
 
-                if (localLayer is SegmentLayer)
+                if (localLayer is SegmentLayer segmentLayer)
                 {
-                    var segmentLayer = localLayer as SegmentLayer;
                     var segments = segmentLayer.Segments;
                     var edgeProfile = segmentLayer.Profiles;
                     var edgeMeta = segmentLayer.Meta;
 
-                    for (var i = 0; i < segments.Length; i++)
+                    for (var i = 0; i < segments.Count; i++)
                     {
                         var feature = new Mapbox.Tile.Feature();
 
@@ -102,7 +98,7 @@ namespace Itinero.VectorTiles.Mapbox
                                 attributes.AddOrReplace(a);
                             }
 
-                            attributes = mapAttributes(attributes, localLayer);
+                            attributes = mapAttributes(attributes, segmentLayer);
                             AddAttributes(feature.Tags, keys, values, attributes);
                         }
                         else
@@ -118,30 +114,24 @@ namespace Itinero.VectorTiles.Mapbox
                         layer.Features.Add(feature);
                     }
                 }
-                else if (localLayer is StopLayer)
+                else if (localLayer is VertexLayer vertexLayer)
                 {
-                    var pointLayer = localLayer as StopLayer;
-                    var points = pointLayer.Points;
-                    var metaIndex = pointLayer.Meta;
+                    var vertices = vertexLayer.Vertices;
 
-                    for (var i = 0; i < points.Length; i++)
+                    for (var i = 0; i < vertices.Count; i++)
                     {
-                        var point = points[i];
-
+                        var vertex = vertices[i];
+                        var vertexLocation = vertexLayer.Config.GetLocationFunc(vertex);
+                        var vertexMeta = vertexLayer.Config.GetAttributesFunc(vertex);
+                        
                         var feature = new Mapbox.Tile.Feature();
 
-                        var posX = (int) ((point.Longitude - left) / longitudeStep);
-                        var posY = (int) ((top - point.Latitude) / latitudeStep);
+                        var posX = (int) ((vertexLocation.Longitude - left) / longitudeStep);
+                        var posY = (int) ((top - vertexLocation.Latitude) / latitudeStep);
                         GenerateMoveTo(feature.Geometry, posX, posY);
                         feature.Type = Tile.GeomType.Point;
-
-                        var attributes = metaIndex.Get(point.MetaId);
-                        if (mapAttributes != null)
-                        {
-                            attributes = mapAttributes(attributes, localLayer);
-                        }
-
-                        AddAttributes(feature.Tags, keys, values, attributes);
+                        
+                        AddAttributes(feature.Tags, keys, values, vertexMeta);
 
                         layer.Features.Add(feature);
                     }

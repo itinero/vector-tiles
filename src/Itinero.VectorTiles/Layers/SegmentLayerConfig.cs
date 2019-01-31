@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace Itinero.VectorTiles.Layers
 {
@@ -33,5 +34,21 @@ namespace Itinero.VectorTiles.Layers
         /// Gets or sets the include profile func.
         /// </summary>
         public Func<ushort, uint, bool> IncludeProfileFunc { get; set; }
+
+        /// <summary>
+        /// Creates a new layer based on this configuration.
+        /// </summary>
+        /// <returns></returns>
+        public SegmentLayer NewLayer(RouterDb routerDb)
+        {
+            return new SegmentLayer()
+            {
+                Meta = routerDb.EdgeMeta,
+                Profiles =  routerDb.EdgeProfiles,
+                EdgeMeta =  routerDb.EdgeData,
+                Name = this.Name,
+                Segments = new List<Segment>()
+            };
+        }
     }
 }

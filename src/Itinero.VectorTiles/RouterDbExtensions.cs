@@ -28,6 +28,9 @@ using Itinero.VectorTiles.Layers;
 using Itinero.VectorTiles.Tiles;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Itinero.Attributes;
+using Attribute = Itinero.Attributes.Attribute;
 
 namespace Itinero.VectorTiles
 {
@@ -37,13 +40,15 @@ namespace Itinero.VectorTiles
     public static class RouterDbExtensions
     {
         /// <summary>
-        /// Extracts segments for the given tile.
+        /// Extracts a segment layer for the given tile.
         /// </summary>
-        public static Segment[] ExtractSegments(this RouterDb routerDb, ulong tileId,
-            SegmentLayerConfig config)
+        public static IEnumerable<Layer> ExtractLayers(this RouterDb routerDb, ulong tileId,
+            VectorTileConfig config)
         {
             if (config == null) { throw new ArgumentNullException(nameof(config)); }
-            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
+
+            var segmentLayerConfig = config.SegmentLayerConfig;
+            if (segmentLayerConfig != null && segmentLayerConfig.Name == null) { throw new ArgumentException($"{nameof(config.SegmentLayerConfig)} configuration has no name set."); }
 
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
@@ -53,7 +58,17 @@ namespace Itinero.VectorTiles
 
             var tileBox = new LocalGeo.Box(tile.Bottom - marginY, tile.Left - marginX, 
                 tile.Top + marginY, tile.Right + marginX);
-            var segments = new List<Segment>();
+            var segmentLayer = segmentLayerConfig?.NewLayer(routerDb);
+            
+            // initialize vertex layers.
+            var vertexLayers = new List<VertexLayer>();
+            if (config.VertexLayerConfigs != null)
+            {
+                foreach (var vertexLayerConfig in config.VertexLayerConfigs)
+                {
+                    vertexLayers.Add(vertexLayerConfig.NewLayer());
+                }
+            }
 
             var vertices = HilbertExtensions.Search(routerDb.Network.GeometricGraph,
                 tileBox.MinLat - diffY, tileBox.MinLon - diffX, 
@@ -65,7 +80,19 @@ namespace Itinero.VectorTiles
             {
                 var coordinateFrom = routerDb.Network.GetVertex(vertex);
 
-                edgeEnumerator.MoveTo(vertex);
+                if (!edgeEnumerator.MoveTo(vertex)) continue;
+
+                // add vertex to each layer that wants it.
+                foreach (var vertexLayer in vertexLayers)
+                {
+                    if (vertexLayer.Config.IncludeFunc(vertex))
+                    {
+                        vertexLayer.Vertices.Add(vertex);
+                    }
+                }
+                
+                if (segmentLayer == null) continue;
+                
                 edgeEnumerator.Reset();
                 while (edgeEnumerator.MoveNext())
                 {
@@ -79,8 +106,7 @@ namespace Itinero.VectorTiles
                     var edgeData = edgeEnumerator.Data;
 
                     // check if this edge needs to be included or not.
-                    if (config != null && config.IncludeProfileFunc != null &&
-                        !config.IncludeProfileFunc(edgeData.Profile, edgeData.MetaId))
+                    if (segmentLayerConfig?.IncludeProfileFunc != null && !segmentLayerConfig.IncludeProfileFunc(edgeData.Profile, edgeData.MetaId))
                     { // include profile returns false
                         continue;
                     }
@@ -124,7 +150,7 @@ namespace Itinero.VectorTiles
                                 shape.Add(intersection.Value);
                             }
 
-                            segments.Add(new Segment()
+                            segmentLayer.Segments.Add(new Segment()
                             {
                                 Meta = edgeData.MetaId,
                                 Profile = edgeData.Profile,
@@ -138,7 +164,7 @@ namespace Itinero.VectorTiles
 
                     if (shape.Count >= 2)
                     {
-                        segments.Add(new Segment()
+                        segmentLayer.Segments.Add(new Segment()
                         {
                             Meta = edgeData.MetaId,
                             Profile = edgeData.Profile,
@@ -150,45 +176,58 @@ namespace Itinero.VectorTiles
                 }
             }
 
-            return segments.ToArray();
-        }
-
-        /// <summary>
-        /// Extracts a segment layer for the given tile.
-        /// </summary>
-        public static SegmentLayer ExtractSegmentLayer(this RouterDb routerDb, ulong tileId,
-            SegmentLayerConfig config)
-        {
-            if (config == null) { throw new ArgumentNullException(nameof(config)); }
-            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
-
-            return new SegmentLayer()
-            {
-                Meta = routerDb.EdgeMeta,
-                Profiles = routerDb.EdgeProfiles,
-                EdgeMeta = routerDb.EdgeData,
-                Name = config.Name,
-                Segments = routerDb.ExtractSegments(tileId, config)
-            };
+            var layers = new List<Layer>(vertexLayers);
+            if (segmentLayer !=null) layers.Add(segmentLayer);
+            return layers;
         }
 
         /// <summary>
         /// Extracts a vector tile of the given tile.
         /// </summary>
         public static VectorTile ExtractTile(this RouterDb routerDb, ulong tileId, 
-            SegmentLayerConfig config)
+            VectorTileConfig config)
         {
             if (config == null) { throw new ArgumentNullException(nameof(config)); }
-            if (config.Name == null) { throw new ArgumentException("Layer configuration has no name set."); }
-            
-            var layers = new List<Layer>(1);
-            layers.Add(routerDb.ExtractSegmentLayer(tileId, config));
+
+            var layers = routerDb.ExtractLayers(tileId, config);
 
             return new VectorTile()
             {
-                Layers = layers,
+                Layers = new List<Layer>(layers),
                 TileId = tileId
             };
+        }
+
+        /// <summary>
+        /// Extracts attributes associated with the given vertex.
+        /// </summary>
+        /// <param name="routerDb">The router db.</param>
+        /// <param name="vertex">The vertex.</param>
+        /// <returns>An enumerable of attributes.</returns>
+        public static IEnumerable<Attribute> GetVertexAttributes(this RouterDb routerDb, uint vertex)
+        {
+            foreach (var vertexMetaName in routerDb.VertexData.Names)
+            {
+                var vertexMeta = routerDb.VertexData.Get(vertexMetaName);
+                var rawData = vertexMeta.GetRaw(vertex);
+                var value = string.Empty;
+                if (rawData != null)
+                {
+                    value = rawData.ToInvariantString();
+                }
+                yield return new Attribute()
+                {
+                    Key = vertexMetaName,
+                    Value = value
+                };
+            }
+
+            var attributes = routerDb.VertexMeta?[vertex];
+            if (attributes == null) yield break;
+            foreach (var a in attributes)
+            {
+                yield return a;
+            }
         }
     }
 }

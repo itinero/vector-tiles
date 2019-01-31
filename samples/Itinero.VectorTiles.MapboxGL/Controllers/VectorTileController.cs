@@ -33,8 +33,7 @@ namespace Itinero.VectorTiles.MapboxGL.Controllers
                     }
 
                     var result = new Attributes.AttributeCollection();
-                    string highway;
-                    if (a.TryGetValue("highway", out highway))
+                    if (a.TryGetValue("highway", out var highway))
                     {
                         var className = string.Empty;
                         switch (highway)
@@ -112,22 +111,27 @@ namespace Itinero.VectorTiles.MapboxGL.Controllers
                 var tile = new Itinero.VectorTiles.Tiles.Tile(tileId);
                 var z = tile.Zoom;
 
-                var config = new SegmentLayerConfig()
+                var config = new VectorTileConfig()
                 {
-                    Name = "transportation",
+                    SegmentLayerConfig = new SegmentLayerConfig()
+                    {
+                        Name = "transportation",
                         IncludeProfileFunc = (p, m) =>
                         {
                             if (z > Program.ProfilesPerZoom.Length)
                             {
                                 return true;
                             }
+
                             var profileSet = Program.ProfilesPerZoom[z];
                             if (profileSet == null)
                             {
                                 return false;
                             }
+
                             return profileSet.Contains(p);
                         }
+                    }
                 };
 
                 return new Result<VectorTile>(Program.RouterDb.ExtractTile(tileId, config));

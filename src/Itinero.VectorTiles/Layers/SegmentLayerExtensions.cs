@@ -14,20 +14,19 @@ namespace Itinero.VectorTiles.Layers
         public static IEnumerable<Attribute> GetEdgeMetaFor(this SegmentLayer segmentLayer, Segment segment)
         {
             var edgeMeta = segmentLayer.EdgeMeta;
-            if (edgeMeta != null)
+            if (edgeMeta == null) yield break;
+            
+            foreach (var metaName in edgeMeta.Names)
             {
-                foreach (var metaName in edgeMeta.Names)
+                var edgeMetaCollection = edgeMeta.Get(metaName);
+                var edgeMetaData = edgeMetaCollection.GetRaw(segment.EdgeId);
+                var key = metaName;
+                var value = string.Empty;
+                if (edgeMetaData != null)
                 {
-                    var edgeMetaCollection = edgeMeta.Get(metaName);
-                    var edgeMetaData = edgeMetaCollection.GetRaw(segment.EdgeId);
-                    var key = metaName;
-                    var value = string.Empty;
-                    if (edgeMetaData != null)
-                    {
-                        value = edgeMetaData.ToInvariantString();
-                    }
-                    yield return new Attribute(key, value);
+                    value = edgeMetaData.ToInvariantString();
                 }
+                yield return new Attribute(key, value);
             }
         }
     }

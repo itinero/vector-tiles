@@ -1,33 +1,9 @@
-﻿// The MIT License (MIT)
-
-// Copyright (c) 2017 Ben Abelshausen
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-using Itinero.Transit.Data;
-using Itinero.VectorTiles.GeoJson;
-using Itinero.VectorTiles.Layers;
-using Mapbox.Vector.Tile;
+﻿using Itinero.VectorTiles.Layers;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Itinero.VectorTiles.Test.Functional.Staging;
 
 namespace Itinero.VectorTiles.Test.Functional
 {
@@ -37,16 +13,41 @@ namespace Itinero.VectorTiles.Test.Functional
         {
             Itinero.Logging.Logger.LogAction = (o, level, message, parameters) =>
             {
-                Log.Information(string.Format("[{0}] {1} - {2}", o, level, message));
+                if (level == Logging.TraceEventType.Verbose.ToString().ToLower())
+                {
+                    Log.Debug($"[{o}] {level} - {message}");
+                }
+                else if (level == Logging.TraceEventType.Information.ToString().ToLower())
+                {
+                    Log.Information($"[{o}] {level} - {message}");
+                }
+                else if (level == Logging.TraceEventType.Warning.ToString().ToLower())
+                {
+                    Log.Warning($"[{o}] {level} - {message}");
+                }
+                else if (level == Logging.TraceEventType.Critical.ToString().ToLower())
+                {
+                    Log.Fatal($"[{o}] {level} - {message}");
+                }
+                else if (level == Logging.TraceEventType.Error.ToString().ToLower())
+                {
+                    Log.Error($"[{o}] {level} - {message}");
+                }
+                else
+                {
+                    Log.Debug($"[{o}] {level} - {message}");
+                }
             };
 
             // attach logger.
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.ColoredConsole()
+                .WriteTo.Console()
                 .CreateLogger();
-       
-            // load multimodal db and extract tiles.
-            var multimodalDb = MultimodalDb.Deserialize(File.OpenRead(@"C:\work\data\routing\belgium.multimodaldb"));
+            
+            // build router db.
+            var routerDb = BuildRouterDb.Build();
+            
+            // test writing vector tiles.
             var tile = Tiles.Tile.CreateAroundLocation(51.267966846313556f, 4.801913201808929f, 9);
             var tileRange = tile.GetSubTiles(14);
 
@@ -60,25 +61,48 @@ namespace Itinero.VectorTiles.Test.Functional
                         {
                             Name = "transportation"
                         },
-                        StopLayerConfig = new StopLayerConfig()
+                        VertexLayerConfigs = new List<VertexLayerConfig>()
                         {
-                            Name = "stops"
+                            new VertexLayerConfig()
+                            {
+                                Name = "cyclenodes",
+                                GetAttributesFunc = (vertex) => routerDb.GetVertexAttributes(vertex),
+                                GetLocationFunc = (vertex) => routerDb.Network.GetVertex(vertex),
+                                IncludeFunc = (vertex) =>
+                                {
+                                    var vertexMeta = routerDb.GetVertexAttributes(vertex);
+                                    foreach (var a in vertexMeta)
+                                    {
+                                        if (a.Key == "rcn_ref")
+                                        {
+                                            return true;
+                                        }
+                                    }
+
+                                    return false;
+                                }
+                            }
                         }
                     };
 
-                    //Log.Information("Extracting tile: {0}", t.ToInvariantString());
-                    var vectorTile = multimodalDb.ExtractTile(t.Id, config);
+                    Log.Information("Extracting tile: {0}", t.ToInvariantString());
+                    var vectorTile = routerDb.ExtractTile(t.Id, config);
 
-                    //Log.Information("Writing tile: {0}", t.ToInvariantString());
-                    using (var stream = File.Open(t.Id.ToInvariantString() + ".mvt", FileMode.Create))
+                    if (vectorTile.IsEmpty) continue;
+                    
+                    Log.Information("Writing tile: {0}", t.ToInvariantString());
+                    var fileInfo = new FileInfo(Path.Combine("tiles", t.Zoom.ToString(), t.X.ToString(), $"{t.Y}.mvt"));
+                    if (!fileInfo.Directory.Exists)
+                    {
+                        fileInfo.Directory.Create();
+                    }
+                    using (var stream = fileInfo.Open(FileMode.Create))
                     {
                         Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(vectorTile, stream);
                     }
                 }
             });
-            func.TestPerf(string.Format("Extracted and written {0} tiles.", tileRange.Count));
-
-            Console.ReadLine();
+            func.TestPerf($"Extracted and written {tileRange.Count} tiles.");
         }
     }
 }
