@@ -113,7 +113,7 @@ namespace Itinero.VectorTiles.MapboxGL.Controllers
 
                 var config = new VectorTileConfig()
                 {
-                    SegmentLayerConfig = new SegmentLayerConfig()
+                    EdgeLayerConfig = new EdgeLayerConfig()
                     {
                         Name = "transportation",
                         IncludeProfileFunc = (p, m) =>

@@ -11,7 +11,7 @@ namespace Itinero.VectorTiles
         /// <summary>
         /// Gets or sets the segment layer configurations.
         /// </summary>
-        public SegmentLayerConfig SegmentLayerConfig { get; set; }
+        public EdgeLayerConfig EdgeLayerConfig { get; set; }
         
         /// <summary>
         /// Gets or sets the vertex layer configurations.

@@ -1,26 +1,4 @@
-﻿// The MIT License (MIT)
-
-// Copyright (c) 2017 Ben Abelshausen
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-using Itinero.Algorithms.Search.Hilbert;
+﻿using Itinero.Algorithms.Search.Hilbert;
 using Itinero.Data.Network;
 using Itinero.Graphs.Geometric;
 using Itinero.LocalGeo;
@@ -47,8 +25,8 @@ namespace Itinero.VectorTiles
         {
             if (config == null) { throw new ArgumentNullException(nameof(config)); }
 
-            var segmentLayerConfig = config.SegmentLayerConfig;
-            if (segmentLayerConfig != null && segmentLayerConfig.Name == null) { throw new ArgumentException($"{nameof(config.SegmentLayerConfig)} configuration has no name set."); }
+            var segmentLayerConfig = config.EdgeLayerConfig;
+            if (segmentLayerConfig != null && segmentLayerConfig.Name == null) { throw new ArgumentException($"{nameof(config.EdgeLayerConfig)} configuration has no name set."); }
 
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
@@ -111,7 +89,8 @@ namespace Itinero.VectorTiles
                     var edgeData = edgeEnumerator.Data;
 
                     // check if this edge needs to be included or not.
-                    if (segmentLayerConfig?.IncludeProfileFunc != null && !segmentLayerConfig.IncludeProfileFunc(edgeData.Profile, edgeData.MetaId))
+                    if (segmentLayerConfig?.GetAttributesFunc != null && 
+                        segmentLayerConfig.GetAttributesFunc(edgeEnumerator.Id, tile.Zoom) == null)
                     { // include profile returns false
                         continue;
                     }
@@ -155,10 +134,8 @@ namespace Itinero.VectorTiles
                                 shape.Add(intersection.Value);
                             }
 
-                            segmentLayer.Segments.Add(new Segment()
+                            segmentLayer.Edges.Add(new Edge()
                             {
-                                Meta = edgeData.MetaId,
-                                Profile = edgeData.Profile,
                                 Shape = shape.ToArray(),
                                 EdgeId = edgeEnumerator.Id,
                             });
@@ -169,10 +146,8 @@ namespace Itinero.VectorTiles
 
                     if (shape.Count >= 2)
                     {
-                        segmentLayer.Segments.Add(new Segment()
+                        segmentLayer.Edges.Add(new Edge()
                         {
-                            Meta = edgeData.MetaId,
-                            Profile = edgeData.Profile,
                             EdgeId = edgeEnumerator.Id,
                             Shape = shape.ToArray()
                         });

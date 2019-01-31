@@ -58,9 +58,20 @@ namespace Itinero.VectorTiles.Test.Functional
                 {
                     var config = new VectorTileConfig()
                     {
-                        SegmentLayerConfig = new SegmentLayerConfig()
+                        EdgeLayerConfig = new EdgeLayerConfig()
                         {
-                            Name = "transportation"
+                            Name = "cyclenetwork",
+                            GetAttributesFunc = (edgeId, zoom) =>
+                            {
+                                var edge = routerDb.Network.GetEdge(edgeId);
+                                var attributes = routerDb.GetProfileAndMeta(edge.Data.Profile, edge.Data.MetaId);
+                                var ok = attributes.Any(a => a.Key == "cyclenetwork");
+                                if (!ok)
+                                {
+                                    return null;
+                                }
+                                return attributes;
+                            }
                         },
                         VertexLayerConfigs = new List<VertexLayerConfig>()
                         {

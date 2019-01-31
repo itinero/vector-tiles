@@ -34,8 +34,7 @@ namespace Itinero.VectorTiles.Mapbox
         /// <summary>
         /// Writes the tile to the given stream.
         /// </summary>
-        public static void Write(this VectorTile vectorTile, Stream stream,
-            Func<IAttributeCollection, Itinero.VectorTiles.Layers.Layer, IAttributeCollection> mapAttributes = null, uint extent = 4096)
+        public static void Write(this VectorTile vectorTile, Stream stream, uint extent = 4096)
         {
             var tile = new Tiles.Tile(vectorTile.TileId);
 
@@ -52,17 +51,15 @@ namespace Itinero.VectorTiles.Mapbox
                 var keys = new Dictionary<string, uint>();
                 var values = new Dictionary<string, uint>();
 
-                if (localLayer is SegmentLayer segmentLayer)
+                if (localLayer is EdgeLayer segmentLayer)
                 {
-                    var segments = segmentLayer.Segments;
-                    var edgeProfile = segmentLayer.Profiles;
-                    var edgeMeta = segmentLayer.Meta;
+                    var edges = segmentLayer.Edges;
 
-                    for (var i = 0; i < segments.Count; i++)
+                    for (var i = 0; i < edges.Count; i++)
                     {
                         var feature = new Mapbox.Tile.Feature();
 
-                        var shape = segments[i].Shape;
+                        var shape = edges[i].Shape;
                         var posX = (int) ((shape[0].Longitude - left) / longitudeStep);
                         var posY = (int) ((top - shape[0].Latitude) / latitudeStep);
                         GenerateMoveTo(feature.Geometry, posX, posY);
@@ -84,32 +81,8 @@ namespace Itinero.VectorTiles.Mapbox
 
                         feature.Type = Tile.GeomType.LineString;
 
-                        if (mapAttributes != null)
-                        {
-                            IAttributeCollection attributes = new AttributeCollection(edgeProfile.Get(segments[i].Profile));
-                            var meta = edgeMeta.Get(segments[i].Meta);
-                            foreach (var a in meta)
-                            {
-                                attributes.AddOrReplace(a);
-                            }
-                            var edgeMetaData = segmentLayer.GetEdgeMetaFor(segments[i]);
-                            foreach (var a in edgeMetaData)
-                            {
-                                attributes.AddOrReplace(a);
-                            }
-
-                            attributes = mapAttributes(attributes, segmentLayer);
-                            AddAttributes(feature.Tags, keys, values, attributes);
-                        }
-                        else
-                        {
-                            var profile = edgeProfile.Get(segments[i].Profile);
-                            AddAttributes(feature.Tags, keys, values, profile);
-                            var meta = edgeMeta.Get(segments[i].Meta);
-                            AddAttributes(feature.Tags, keys, values, meta);
-                            var edgeMetaData = segmentLayer.GetEdgeMetaFor(segments[i]);
-                            AddAttributes(feature.Tags, keys, values, edgeMetaData);
-                        }
+                        var attributes = segmentLayer.Config.GetAttributesFunc(edges[i].EdgeId, tile.Zoom);
+                        AddAttributes(feature.Tags, keys, values, attributes);
 
                         layer.Features.Add(feature);
                     }
