@@ -12,19 +12,11 @@ namespace Itinero.VectorTiles.Layers
     public class VertexLayerConfig : LayerConfig
     {
         /// <summary>
-        /// Gets or set the include vertex function.
-        /// </summary>
-        public Func<uint, bool> IncludeFunc { get; set; }
-        
-        /// <summary>
         /// Gets or sets the function to get the attributes to include.
+        ///
+        /// If this returns null the vertex is not included.
         /// </summary>
         public Func<uint, IEnumerable<Attribute>> GetAttributesFunc { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the function to get vertex location.
-        /// </summary>
-        public Func<uint, Coordinate> GetLocationFunc { get; set; }
 
         /// <summary>
         /// Creates a new layer based on this configuration.
@@ -35,7 +27,7 @@ namespace Itinero.VectorTiles.Layers
             return new VertexLayer()
             {
                 Name = this.Name,
-                Vertices = new List<uint>(),
+                Vertices = new List<Vertex>(),
                 Config = this
             };
         }

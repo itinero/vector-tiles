@@ -121,13 +121,12 @@ namespace Itinero.VectorTiles.Mapbox
                     for (var i = 0; i < vertices.Count; i++)
                     {
                         var vertex = vertices[i];
-                        var vertexLocation = vertexLayer.Config.GetLocationFunc(vertex);
-                        var vertexMeta = vertexLayer.Config.GetAttributesFunc(vertex);
+                        var vertexMeta = vertexLayer.Config.GetAttributesFunc(vertex.Id);
                         
                         var feature = new Mapbox.Tile.Feature();
 
-                        var posX = (int) ((vertexLocation.Longitude - left) / longitudeStep);
-                        var posY = (int) ((top - vertexLocation.Latitude) / latitudeStep);
+                        var posX = (int) ((vertex.Longitude - left) / longitudeStep);
+                        var posY = (int) ((top - vertex.Latitude) / latitudeStep);
                         GenerateMoveTo(feature.Geometry, posX, posY);
                         feature.Type = Tile.GeomType.Point;
                         

@@ -85,9 +85,14 @@ namespace Itinero.VectorTiles
                 // add vertex to each layer that wants it.
                 foreach (var vertexLayer in vertexLayers)
                 {
-                    if (vertexLayer.Config.IncludeFunc(vertex))
+                    if (vertexLayer.Config.GetAttributesFunc(vertex) != null)
                     {
-                        vertexLayer.Vertices.Add(vertex);
+                        vertexLayer.Vertices.Add(new Vertex()
+                        {
+                            Latitude = coordinateFrom.Latitude,
+                            Longitude = coordinateFrom.Longitude,
+                            Id = vertex
+                        });
                     }
                 }
                 

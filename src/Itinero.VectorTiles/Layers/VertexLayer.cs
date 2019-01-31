@@ -12,7 +12,7 @@ namespace Itinero.VectorTiles.Layers
         /// <summary>
         /// Gets or sets the vertices.
         /// </summary>
-        public List<uint> Vertices { get; set; }
+        public List<Vertex> Vertices { get; set; }
         
         /// <summary>
         /// Gets or sets the config.

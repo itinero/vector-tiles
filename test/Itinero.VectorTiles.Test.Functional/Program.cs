@@ -3,6 +3,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Itinero.VectorTiles.Test.Functional.Staging;
 
 namespace Itinero.VectorTiles.Test.Functional
@@ -66,20 +67,15 @@ namespace Itinero.VectorTiles.Test.Functional
                             new VertexLayerConfig()
                             {
                                 Name = "cyclenodes",
-                                GetAttributesFunc = (vertex) => routerDb.GetVertexAttributes(vertex),
-                                GetLocationFunc = (vertex) => routerDb.Network.GetVertex(vertex),
-                                IncludeFunc = (vertex) =>
+                                GetAttributesFunc = (vertex) =>
                                 {
-                                    var vertexMeta = routerDb.GetVertexAttributes(vertex);
-                                    foreach (var a in vertexMeta)
+                                    var attributes = routerDb.GetVertexAttributes(vertex);
+                                    var ok = attributes.Any(a => a.Key == "rcn_ref");
+                                    if (!ok)
                                     {
-                                        if (a.Key == "rcn_ref")
-                                        {
-                                            return true;
-                                        }
+                                        return null;
                                     }
-
-                                    return false;
+                                    return attributes;
                                 }
                             }
                         }
