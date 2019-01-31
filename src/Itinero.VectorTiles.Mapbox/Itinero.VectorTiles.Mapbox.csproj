@@ -4,6 +4,15 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>Itinero.VectorTiles.Mapbox</AssemblyName>
     <PackageId>Itinero.VectorTiles.Mapbox</PackageId>
+    <Description>A module for Itinero to generate vector tiles from a routing database.</Description>
+    <Summary>A module for Itinero to generate vector tiles from a routing database.</Summary>
+    <Authors>Itinero BVBA</Authors>
+    <PackageId>Itinero.VectorTiles</PackageId>
+    <PackageTags>routing;vector-tiles</PackageTags>
+    <PackageIconUrl>http://www.itinero.tech/logos/itinero_logo_notext.svg.128.png</PackageIconUrl>
+    <PackageProjectUrl>http://www.itinero.tech/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itinero/vector-tiles</RepositoryUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/itinero/vector-tiles/master/LICENSE.md</PackageLicenseUrl>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
