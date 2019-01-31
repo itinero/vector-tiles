@@ -20,7 +20,7 @@ namespace Itinero.VectorTiles.Layers
         /// Creates a new layer based on this configuration.
         /// </summary>
         /// <returns></returns>
-        public EdgeLayer NewLayer(RouterDb routerDb)
+        public EdgeLayer NewLayer()
         {
             return new EdgeLayer()
             {

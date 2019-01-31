@@ -25,9 +25,6 @@ namespace Itinero.VectorTiles
         {
             if (config == null) { throw new ArgumentNullException(nameof(config)); }
 
-            var segmentLayerConfig = config.EdgeLayerConfig;
-            if (segmentLayerConfig != null && segmentLayerConfig.Name == null) { throw new ArgumentException($"{nameof(config.EdgeLayerConfig)} configuration has no name set."); }
-
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
             var diffY = (tile.Right - tile.Left);
@@ -36,7 +33,6 @@ namespace Itinero.VectorTiles
 
             var tileBox = new LocalGeo.Box(tile.Bottom - marginY, tile.Left - marginX, 
                 tile.Top + marginY, tile.Right + marginX);
-            var segmentLayer = segmentLayerConfig?.NewLayer(routerDb);
             
             // initialize vertex layers.
             var vertexLayers = new List<VertexLayer>();
@@ -47,6 +43,18 @@ namespace Itinero.VectorTiles
                     vertexLayers.Add(vertexLayerConfig.NewLayer());
                 }
             }
+            
+            // initialize edge layers.
+            var edgeLayers = new List<EdgeLayer>();
+            if (config.EdgeLayerConfigs != null)
+            {
+                foreach (var edgeLayerConfig in config.EdgeLayerConfigs)
+                {
+                    edgeLayers.Add(edgeLayerConfig.NewLayer());
+                }
+            }
+
+            if (edgeLayers.Count == 0 && vertexLayers.Count == 0) return Enumerable.Empty<Layer>();
 
             var vertices = HilbertExtensions.Search(routerDb.Network.GeometricGraph,
                 tileBox.MinLat - diffY, tileBox.MinLon - diffX, 
@@ -74,8 +82,6 @@ namespace Itinero.VectorTiles
                     }
                 }
                 
-                if (segmentLayer == null) continue;
-                
                 edgeEnumerator.Reset();
                 while (edgeEnumerator.MoveNext())
                 {
@@ -88,10 +94,11 @@ namespace Itinero.VectorTiles
                     // loop over shape.
                     var edgeData = edgeEnumerator.Data;
 
-                    // check if this edge needs to be included or not.
-                    if (segmentLayerConfig?.GetAttributesFunc != null && 
-                        segmentLayerConfig.GetAttributesFunc(edgeEnumerator.Id, tile.Zoom) == null)
-                    { // include profile returns false
+                    // build a list of layers to included or not.
+                    var include = edgeLayers.Where(l => l.Config.GetAttributesFunc(edgeEnumerator.Id, tile.Zoom) != null)
+                        .ToList();
+                    if (include.Count == 0)
+                    { // nothing to include.
                         continue;
                     }
 
@@ -134,11 +141,14 @@ namespace Itinero.VectorTiles
                                 shape.Add(intersection.Value);
                             }
 
-                            segmentLayer.Edges.Add(new Edge()
+                            foreach (var layer in include)
                             {
-                                Shape = shape.ToArray(),
-                                EdgeId = edgeEnumerator.Id,
-                            });
+                                layer.Edges.Add(new Edge()
+                                {
+                                    Shape = shape.ToArray(),
+                                    EdgeId = edgeEnumerator.Id,
+                                });
+                            }
                             shape.Clear();
                             previous = false;
                         }
@@ -146,18 +156,21 @@ namespace Itinero.VectorTiles
 
                     if (shape.Count >= 2)
                     {
-                        segmentLayer.Edges.Add(new Edge()
+                        foreach (var layer in include)
                         {
-                            EdgeId = edgeEnumerator.Id,
-                            Shape = shape.ToArray()
-                        });
+                            layer.Edges.Add(new Edge()
+                            {
+                                Shape = shape.ToArray(),
+                                EdgeId = edgeEnumerator.Id,
+                            });
+                        }
                         shape.Clear();
                     }
                 }
             }
 
             var layers = new List<Layer>(vertexLayers);
-            if (segmentLayer !=null) layers.Add(segmentLayer);
+            layers.AddRange(edgeLayers);
             return layers;
         }
 
