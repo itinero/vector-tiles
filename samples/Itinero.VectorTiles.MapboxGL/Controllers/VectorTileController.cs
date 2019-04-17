@@ -69,6 +69,7 @@ namespace Itinero.VectorTiles.MapboxGL.Controllers
                                 // filter and convert attributes.
                                 var a = new AttributeCollection(Program.RouterDb.GetEdgeAttributes(edgeId));
                                 var result = new Attributes.AttributeCollection();
+                                
                                 if (a.TryGetValue("highway", out var highway))
                                 {
                                     var className = string.Empty;
