@@ -28,8 +28,8 @@ namespace Itinero.VectorTiles
             var tile = new Tile(tileId);
             var diffX = (tile.Top - tile.Bottom);
             var diffY = (tile.Right - tile.Left);
-            var marginX = diffX / 1024;
-            var marginY = diffY / 1024;
+            var marginX = diffX / 512;
+            var marginY = diffY / 512;
 
             var tileBox = new LocalGeo.Box(tile.Bottom - marginY, tile.Left - marginX, 
                 tile.Top + marginY, tile.Right + marginX);
