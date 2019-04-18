@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Itinero.Attributes;
 using Itinero.VectorTiles.Layers;
+using ProtoBuf;
 
 namespace Itinero.VectorTiles.Mapbox
 {
@@ -21,10 +21,10 @@ namespace Itinero.VectorTiles.Mapbox
             double top = tile.Top;
             double left = tile.Left;
 
-            var mapboxTile = new Mapbox.Tile();
+            var mapboxTile = new Tile();
             foreach (var localLayer in vectorTile.Layers)
             {
-                var layer = new Mapbox.Tile.Layer {Version = 2, Name = localLayer.Name, Extent = extent};
+                var layer = new Tile.Layer {Version = 2, Name = localLayer.Name, Extent = extent};
 
                 var keys = new Dictionary<string, uint>();
                 var values = new Dictionary<string, uint>();
@@ -35,34 +35,46 @@ namespace Itinero.VectorTiles.Mapbox
 
                     for (var i = 0; i < edges.Count; i++)
                     {
-                        var feature = new Mapbox.Tile.Feature();
-
-                        var shape = edges[i].Shape;
-                        var posX = (int) ((shape[0].Longitude - left) / longitudeStep);
-                        var posY = (int) ((top - shape[0].Latitude) / latitudeStep);
-                        GenerateMoveTo(feature.Geometry, posX, posY);
-
-                        // generate line to.
-                        feature.Geometry.Add(GenerateCommandInteger(2, shape.Length - 1));
-                        for (var j = 1; j < shape.Length; j++)
+                        var postProcess = segmentLayer.Config.PostProcess ??
+                                          (attr => new List<IEnumerable<Attribute>> {attr});
+                        var attributess =
+                            postProcess(segmentLayer.Config.GetAttributesFunc(edges[i].EdgeId, tile.Zoom));
+                        if (attributess == null)
                         {
-                            var localPosX = (int) ((shape[j].Longitude - left) / longitudeStep);
-                            var localPosY = (int) ((top - shape[j].Latitude) / latitudeStep);
-                            var dx = localPosX - posX;
-                            var dy = localPosY - posY;
-                            posX = localPosX;
-                            posY = localPosY;
-
-                            feature.Geometry.Add(GenerateParameterInteger(dx));
-                            feature.Geometry.Add(GenerateParameterInteger(dy));
+                            continue;
                         }
 
-                        feature.Type = Tile.GeomType.LineString;
+                        foreach (var attributes in attributess)
+                        {
+                            var feature = new Tile.Feature();
 
-                        var attributes = segmentLayer.Config.GetAttributesFunc(edges[i].EdgeId, tile.Zoom);
-                        AddAttributes(feature.Tags, keys, values, attributes);
+                            var shape = edges[i].Shape;
+                            var posX = (int) ((shape[0].Longitude - left) / longitudeStep);
+                            var posY = (int) ((top - shape[0].Latitude) / latitudeStep);
+                            GenerateMoveTo(feature.Geometry, posX, posY);
 
-                        layer.Features.Add(feature);
+                            // generate line to.
+                            feature.Geometry.Add(GenerateCommandInteger(2, shape.Length - 1));
+                            for (var j = 1; j < shape.Length; j++)
+                            {
+                                var localPosX = (int) ((shape[j].Longitude - left) / longitudeStep);
+                                var localPosY = (int) ((top - shape[j].Latitude) / latitudeStep);
+                                var dx = localPosX - posX;
+                                var dy = localPosY - posY;
+                                posX = localPosX;
+                                posY = localPosY;
+
+                                feature.Geometry.Add(GenerateParameterInteger(dx));
+                                feature.Geometry.Add(GenerateParameterInteger(dy));
+                            }
+
+
+                            feature.Type = Tile.GeomType.LineString;
+
+                            AddAttributes(feature.Tags, keys, values, attributes);
+
+                            layer.Features.Add(feature);
+                        }
                     }
                 }
                 else if (localLayer is VertexLayer vertexLayer)
@@ -72,22 +84,32 @@ namespace Itinero.VectorTiles.Mapbox
                     for (var i = 0; i < vertices.Count; i++)
                     {
                         var vertex = vertices[i];
-                        var vertexMeta = vertexLayer.Config.GetAttributesFunc(vertex.Id, tile.Zoom);
-                        
-                        var feature = new Mapbox.Tile.Feature();
+                        var postProcess = vertexLayer.Config.PostProcess ??
+                                          (attr => new List<IEnumerable<Attribute>>() {attr});
+                        var vertexMetas = postProcess(vertexLayer.Config.GetAttributesFunc(vertex.Id, tile.Zoom));
+                        if (vertexMetas == null)
+                        {
+                            continue;
+                        }
 
-                        var posX = (int) ((vertex.Longitude - left) / longitudeStep);
-                        var posY = (int) ((top - vertex.Latitude) / latitudeStep);
-                        GenerateMoveTo(feature.Geometry, posX, posY);
-                        feature.Type = Tile.GeomType.Point;
-                        
-                        AddAttributes(feature.Tags, keys, values, vertexMeta);
+                        foreach (var vertexMeta in vertexMetas)
+                        {
+                            var feature = new Tile.Feature();
 
-                        layer.Features.Add(feature);
+                            var posX = (int) ((vertex.Longitude - left) / longitudeStep);
+                            var posY = (int) ((top - vertex.Latitude) / latitudeStep);
+                            GenerateMoveTo(feature.Geometry, posX, posY);
+                            feature.Type = Tile.GeomType.Point;
+
+                            AddAttributes(feature.Tags, keys, values, vertexMeta);
+
+                            layer.Features.Add(feature);
+                        }
                     }
                 }
                 else
-                { // unknown type of layer.
+                {
+                    // unknown type of layer.
                     continue;
                 }
 
@@ -116,14 +138,15 @@ namespace Itinero.VectorTiles.Mapbox
                         });
                     }
                 }
+
                 mapboxTile.Layers.Add(layer);
             }
 
-            ProtoBuf.Serializer.Serialize<Tile>(stream, mapboxTile);
+            Serializer.Serialize<Tile>(stream, mapboxTile);
         }
 
         private static void AddAttributes(List<uint> tags, Dictionary<string, uint> keys,
-            Dictionary<string, uint> values, IEnumerable<Attributes.Attribute> attributes)
+            Dictionary<string, uint> values, IEnumerable<Attribute> attributes)
         {
             if (attributes != null)
             {
@@ -157,7 +180,8 @@ namespace Itinero.VectorTiles.Mapbox
         /// Generates a command integer.
         /// </summary>
         private static uint GenerateCommandInteger(int id, int count)
-        { // CommandInteger = (id & 0x7) | (count << 3)
+        {
+            // CommandInteger = (id & 0x7) | (count << 3)
             return (uint) ((id & 0x7) | (count << 3));
         }
 
@@ -167,8 +191,9 @@ namespace Itinero.VectorTiles.Mapbox
         /// <param name="value"></param>
         /// <returns></returns>
         private static uint GenerateParameterInteger(int value)
-        { // ParameterInteger = (value << 1) ^ (value >> 31)
-            return (uint) ((value<<1) ^ (value>> 31));
+        {
+            // ParameterInteger = (value << 1) ^ (value >> 31)
+            return (uint) ((value << 1) ^ (value >> 31));
         }
     }
 }

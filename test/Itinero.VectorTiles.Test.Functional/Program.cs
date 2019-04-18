@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Itinero.VectorTiles.Test.Functional.Staging;
+using Attribute = Itinero.Attributes.Attribute;
 
 namespace Itinero.VectorTiles.Test.Functional
 {
@@ -44,10 +45,10 @@ namespace Itinero.VectorTiles.Test.Functional
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .CreateLogger();
-            
+
             // build router db.
             var routerDb = BuildRouterDb.Build();
-            
+
             // test writing vector tiles.
             var tile = Tiles.Tile.CreateAroundLocation(51.267966846313556f, 4.801913201808929f, 9);
             var tileRange = tile.GetSubTiles(14);
@@ -59,7 +60,7 @@ namespace Itinero.VectorTiles.Test.Functional
                     var config = new VectorTileConfig()
                     {
                         EdgeLayerConfigs = new List<EdgeLayerConfig>()
-                        { 
+                        {
                             new EdgeLayerConfig()
                             {
                                 Name = "cyclenetwork",
@@ -67,12 +68,13 @@ namespace Itinero.VectorTiles.Test.Functional
                                 {
                                     var attributes = routerDb.GetEdgeAttributes(edgeId);
                                     if (attributes == null) return null;
-                                    
+
                                     var ok = attributes.Any(a => a.Key == "cyclenetwork");
                                     if (!ok)
                                     {
                                         return null;
                                     }
+
                                     return attributes;
                                 }
                             }
@@ -90,6 +92,7 @@ namespace Itinero.VectorTiles.Test.Functional
                                     {
                                         return null;
                                     }
+
                                     return attributes;
                                 }
                             }
@@ -100,13 +103,14 @@ namespace Itinero.VectorTiles.Test.Functional
                     var vectorTile = routerDb.ExtractTile(t.Id, config);
 
                     if (vectorTile.IsEmpty) continue;
-                    
+
                     Log.Information("Writing tile: {0}", t.ToInvariantString());
                     var fileInfo = new FileInfo(Path.Combine("tiles", t.Zoom.ToString(), t.X.ToString(), $"{t.Y}.mvt"));
                     if (!fileInfo.Directory.Exists)
                     {
                         fileInfo.Directory.Create();
                     }
+
                     using (var stream = fileInfo.Open(FileMode.Create))
                     {
                         Itinero.VectorTiles.Mapbox.MapboxTileWriter.Write(vectorTile, stream);
