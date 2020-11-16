@@ -23,10 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itinero.VectorTiles.Test", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itinero.VectorTiles.Mapbox", "src\Itinero.VectorTiles.Mapbox\Itinero.VectorTiles.Mapbox.csproj", "{BF140F7A-30C4-4A79-8C11-D1348C935B98}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{4969FEE1-8AC5-4CB9-82A2-06D74AF562C2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itinero.VectorTiles.MapboxGL", "samples\Itinero.VectorTiles.MapboxGL\Itinero.VectorTiles.MapboxGL.csproj", "{5B7A5A27-2DDB-423C-83DC-F063D5950168}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,18 +65,6 @@ Global
 		{BF140F7A-30C4-4A79-8C11-D1348C935B98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF140F7A-30C4-4A79-8C11-D1348C935B98}.Release|x64.ActiveCfg = Release|Any CPU
 		{BF140F7A-30C4-4A79-8C11-D1348C935B98}.Release|x64.Build.0 = Release|Any CPU
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Debug|x64.ActiveCfg = Debug|x64
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Debug|x64.Build.0 = Debug|x64
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Debug|x86.ActiveCfg = Debug|x86
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Debug|x86.Build.0 = Debug|x86
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Release|x64.ActiveCfg = Release|x64
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Release|x64.Build.0 = Release|x64
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Release|x86.ActiveCfg = Release|x86
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,7 +74,6 @@ Global
 		{706CE710-A3B7-4565-9B98-ED3B359808C8} = {7E594B3F-4CA9-4198-B90D-DD16972D0481}
 		{E50C2604-CC1E-4DAE-BB14-851439569413} = {7E594B3F-4CA9-4198-B90D-DD16972D0481}
 		{BF140F7A-30C4-4A79-8C11-D1348C935B98} = {4B330D21-2EE5-4C34-B716-0DB1FBC58E29}
-		{5B7A5A27-2DDB-423C-83DC-F063D5950168} = {4969FEE1-8AC5-4CB9-82A2-06D74AF562C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14F79A2E-BC87-4C87-A8D2-867FD68EB6BC}

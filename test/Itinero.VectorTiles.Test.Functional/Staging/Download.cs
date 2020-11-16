@@ -8,7 +8,7 @@ namespace Itinero.VectorTiles.Test.Functional.Staging
     /// </summary>
     public static class Download
     {
-        public static string PBF = "http://files.itinero.tech/data/OSM/planet/europe/belgium-latest.osm.pbf";
+        public static string PBF = "http://download.geofabrik.de/europe/belgium-latest.osm.pbf";
         public static string Local = "belgium-latest.osm.pbf";
         
         /// <summary>

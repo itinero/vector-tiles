@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>0.0.23-alpha</Version>
     <AssemblyName>Itinero.VectorTiles</AssemblyName>
     <PackageId>Itinero.VectorTiles</PackageId>
     <Description>A module for Itinero to generate vector tiles from a routing database.</Description>
@@ -19,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Itinero" Version="1.4.0-pre92" />
+    <PackageReference Include="Itinero" Version="1.6.0-pre022" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
   </ItemGroup>
 
